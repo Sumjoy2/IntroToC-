@@ -18,7 +18,7 @@ int main()
 	Clamp(15, 200,56);
 	cout << FindValue(numbs, NumbsSize, 3, 0) << endl;
 	ReverseArray(numbs, NumbsSize);
-	cout << endl << Distance(7, 23, 9, 0);
+	cout << endl << Distance(3, 3, 4, 5);
 
 	return 0;
 }
