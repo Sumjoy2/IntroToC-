@@ -3,30 +3,46 @@
 #include <cstdlib>  // for srand
 #include <ctime>    // for time
 
-void Combatant::NameUpdate(char NewName[])
+Combatant::Combatant()
 {
-	for (int i = 0; i < strlen(NewName); i++)
-	{
-		Name[i] = NewName[i];
-	}
+
 }
-	
+
+Combatant::Combatant(std::string UsrName)
+{
+	Name = UsrName;
+}
 
 int Combatant::TakeDamage(int DmgDealt)
-	{
-		int Invincable = std::rand() % 10;
-		if (Invincable == 0)
-		{
-			return Health;
-		}
-		else
-		{
-			Health -= (DmgDealt - Defence);
-			return Health;
-		}
-	}
-
-int Combatant::GetHealth()
+{
+	int Invincable = std::rand() % 10;
+	if (Invincable == 0)
 	{
 		return Health;
 	}
+	else
+	{
+		Health -= (DmgDealt - Defence);
+		return Health;
+	}
+}
+
+int Combatant::GetHealth()
+{
+	return Health;
+}
+
+void Combatant::TurnEffects(const char Input, const char Response, Combatant* Opponent)
+{
+    if (Input == 'a')
+    {
+        if (Response == 'a')
+        {
+			Opponent->TakeDamage(AtkOne);
+        }
+		else
+        {
+			Opponent->TakeDamage(AtkOne / Opponent->Defence);
+        }
+    }
+}
