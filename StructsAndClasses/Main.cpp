@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cstdlib>  // for srand
+#include <ctime>    // for time
 
 struct Vector2Int
 {
@@ -7,39 +9,69 @@ struct Vector2Int
 	int Y = 0;
 };
 
-float FindValue(float Numbers[], size_t Count, float Value, int Start)
-{
-	for (int i = Start; i < Count; i++)
-	{
-		if (Numbers[i] == Value)
-		{
-			return i;
-		}
-	}
-	return -1;
-}
+//int FindValue(float Numbers[], size_t Count, float Value, int Start)
+//{
+//	for (int i = Start; i < Count; i++)
+//	{
+//		if (Numbers[i] == Value)
+//		{
+//			return i;
+//		}
+//	}
+//	return -1;
+//}
 
 class Player
 {
 	//cannot be used outside of class
-	int health = 5;
-	int score = 0;
+private:
+	int Health = 5;
+	int Score = 0;
+	int Defence = 0;
+	int Speed = 0;
+
 	//usable outside of the class
 public:
 	Vector2Int position;
-	char Name[6];
+	char Name[6] = " ";
 
-	int TakeDamage(int DMG)
+	Player() {}
+
+	Player(const char NewName[])
 	{
-		health -= DMG;
-		return health;
+		strcpy_s(Name, NewName);
 	}
 
-	float GetHealth()
+	int TakeDamage(int DmgDealt)
 	{
-		return health;
+		int Invincable = std::rand() % 10;
+		if (Invincable == 0)
+		{
+			return Health;
+		}
+		else
+		{
+			Health -= (DmgDealt - Defence);
+			return Health;
+		}
+	}
+
+	int GetHealth()
+	{
+		return Health;
+	}
+
+	int GetScore()
+	{
+		return Score;
+	}
+
+	int UpdateScore(int ScoreUpAmount)
+	{
+		Score += ScoreUpAmount;
 	}
 };
+
 struct HighScoreData
 {
 	int Score = 0;
@@ -88,44 +120,61 @@ HighScoreData HighestScore(HighScoreData ScoreArray[], int ArraySize)
 
 void HighCopy(HighScoreData ScoreArray[],HighScoreData WriteArray[], int ArraySize, int TopNumber)
 {
-	HighScoreData MostRecent = { 0, 0 };
-	HighScoreData Previous = { 0, 0 };
-	//Loops through how many scores are being put in the new scoreboard
-	for (int i = 0; i < TopNumber; i++)
+	//int Temp = 0;
+
+	//for (int i = 0; i < ArraySize; i++)
+	//{
+	//	Temp = i;
+	//}
+
+	//for (int k = 0; k < ArraySize; k++)
+	//{
+	//	std::cout <<"Temp - k: " << Temp - k << std::endl;
+	//	std::cout <<"Score being compared: " << ScoreArray[k].Score << std::endl;
+	//	for (int o = 0; o < TopNumber; o++)
+	//	{
+	//		//std::cout << "Temp - o: " << (Temp - 2) - o << std::endl;
+	//		if (ScoreArray[k].Score > WriteArray[Temp - o].Score)
+	//		{
+	//			WriteArray[(Temp) - o] = ScoreArray[k];
+	//		}
+	//		std::cout << WriteArray[o].Score << std::endl;
+	//	}
+	//}
+
+	/*Check for biggest number then next biggest till you have TopNumber*/
+	for (int i = 0; i < ArraySize; i++)
 	{
-		//loops through checking if Current score is higher than next score
-		for (int o = 0; o < ArraySize; o++)
+		if (ScoreArray[i].Score > WriteArray[i].Score)
 		{
-			
-			if (ScoreArray[o].Score > MostRecent.Score)
-			{
-				MostRecent = ScoreArray[o];
-				Previous = ScoreArray[i];
-			}
+			WriteArray[i] = ScoreArray[i];
 		}
-		WriteArray[i] = ScoreArray[i];		
-		std::cout << MostRecent.Score << std::endl << std::endl;
 	}
+
 	std::cout << WriteArray;
 }
 
 int main()
 {
+	std::srand(std::time(nullptr));
+
 	Player Players[5];
-	strcpy_s(Players[0].Name, 6, "One");
-	strcpy_s(Players[1].Name, 6, "Two");
-	strcpy_s(Players[2].Name, 6, "Three");
-	strcpy_s(Players[3].Name, 6, "Four");
-	strcpy_s(Players[4].Name, 6, "Five");
+	strcpy_s(Players[0].Name, "One"); strcpy_s(Players[1].Name, "Two"); strcpy_s(Players[2].Name, "Three"); strcpy_s(Players[3].Name, "Four"); strcpy_s(Players[4].Name, "Five");
 	HighScoreData HighScores[5] = {{50, 1.0f, Players[0]},{100, 50.0f, Players[1]},{150, 3.5f, Players[2]},{200, 3.5f, Players[3]},{250, 3.5f, Players[4]}};
 	HighScoreData BlankScores[5];
-	
-	/*std::cout << AvgTime(HighScores, 5) << std::endl;
+
+	/*for (int i = 0; i < 10; i++)
+	{
+		Players[0].TakeDamage(1);
+		std::cout << Players[0].GetHealth();
+	}
+	std::cout << AvgTime(HighScores, 5) << std::endl;
 	std::cout << AvgScore(HighScores, 5) << std::endl;
 	std::cout << HighestScore(HighScores, 5).player.Name << ", " << HighestScore(HighScores, 5).Score << ", " << HighestScore(HighScores, 5).TimeToComplete << std::endl;*/
-	HighCopy(HighScores, BlankScores, 5, 3);
-
 	
+	HighCopy(HighScores, BlankScores, 5, 5);
+
+	//std::cout << std::endl << BlankScores[0].Score;
 
 	return 0;
 }

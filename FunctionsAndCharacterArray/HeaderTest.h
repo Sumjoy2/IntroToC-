@@ -3,7 +3,7 @@
 //declared min with flaots
 float Min(float a, float b);
 int Min(int a, int b);
-double Min(int a, int b);
+double Min(double a, double b);
 
 float Max(float a, float b);
 float FindValue(float Numbers[], size_t Count, float Value, int Start);
