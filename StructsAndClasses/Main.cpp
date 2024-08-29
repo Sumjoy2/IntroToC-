@@ -143,7 +143,7 @@ void HighCopy(HighScoreData ScoreArray[],HighScoreData WriteArray[], int ArraySi
 	//}
 
 	/*Check for biggest number then next biggest till you have TopNumber*/
-	for (int i = 0; i < ArraySize; i++)
+	for (int i = 0; i < TopNumber; i++)
 	{
 		if (ScoreArray[i].Score > WriteArray[i].Score)
 		{
