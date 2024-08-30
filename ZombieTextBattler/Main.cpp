@@ -14,6 +14,18 @@ void PlayerInput(char& Input);
 void OponentInput(char& Resonse);
 void ZombieLoop(Zombie Zombies[], int ZombieNumber, char ZombResponses[]);
 
+/* ToDo:
+* make all zombies attack
+* finish healing
+*  - make limited amount of healing
+*  - randomize healing amount ~ 1d4
+* finish being able to upgrade attack damage
+* make zombies killable
+*  - increment score when zombie dies
+* implement high scores
+* loss condition more explained
+* */
+
 int main()
 {
 #pragma region SetupThings
