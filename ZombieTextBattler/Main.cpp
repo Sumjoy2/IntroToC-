@@ -1,20 +1,93 @@
-// ZombieTextBattler.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
+#include "Player.h"
+#include "Zombie.h"
 #include <iostream>
+#include <cstdlib>  // for srand
+#include <ctime>    // for time
+
+using std::cin;
+using std::cout;
+using std::endl;
+using std::string;
+
+//Initialize Functions Existing
+void PlayerInput(char& Input);
+void OponentInput(char& Resonse);
+void ZombieLoop(Zombie Zombies[], int ZombieNumber, char ZombResponses[]);
 
 int main()
 {
-    std::cout << "Hello World!\n";
+#pragma region SetupThings
+    std::srand(std::time(nullptr));
+    Player Player1 = Player("Player1");
+    Zombie Player2[5];
+
+    Player* Attacker = &Player1;
+
+    Zombie* Zombie1 = &Player2[0];
+
+    char UserInput = '>';
+    char Response[5] = { '<','<','<','<','<', };
+#pragma endregion
+
+#pragma region BattleLoop
+    while(Attacker->TellHealth() != 0 && UserInput != 'q')
+    {
+        ZombieLoop(Player2, 5, Response);
+        cout << "Player Health: " << Attacker->TellHealth() << "\nWhat do you want to do?  a is Attack  d is Defend" << endl;
+        PlayerInput(UserInput);
+        Attacker->TurnEffectsPlayer(UserInput, Response[0], Zombie1);
+        Zombie1->TurnEffectsZombies(Response[0], UserInput, Attacker);
+    }
+#pragma endregion
+    return 0;
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
+void PlayerInput(char& Input)
+{
+    cin >> Input;
+    if (Input == 'a')
+    {
+        cout << "Normal Attack: " << endl;
+    }
+    else if (Input == 'd')
+    {
+        cout << "Defending: " << endl;
+    }
+    /*else if (Input == 's')
+    {
+        cout << "Healing: " << endl;
+    }*/
+    else if (Input == 'q')
+    {
+        return;
+    }
+    else
+    {
+        cout << "Input Not Found: " << endl;
+    }
+}
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+void OponentInput(char& Resonse)
+{
+    int pick = std::rand() % 2;
+    if (pick == 0)
+    {
+        Resonse = 'a';
+        cout << "Opponent Attacks" << endl;
+    }
+    else
+    {
+        Resonse = 's';
+        cout << "Opponent Special Attacks" << endl;
+    }
+}
+
+void ZombieLoop(Zombie Zombies[], int ZombieNumber, char ZombResponses[])
+{
+    for (int i = 0; i < ZombieNumber; i++)
+    {
+        cout << "Zombie "<< i + 1 << " Health: " << Zombies[i].TellHealth() << '\t';
+        OponentInput(ZombResponses[i]);
+    }
+    cout << endl;
+}

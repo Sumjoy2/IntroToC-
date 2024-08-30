@@ -55,8 +55,6 @@ int main()
 
     char UserInput = '>';
     char Response = '<';
-   
-    cout <<"Base Check " << Defender->GetHealth();
 
     while (Attacker->GetHealth() != 0 && Defender->GetHealth() != 0)
     {
@@ -68,5 +66,7 @@ int main()
         cout << "Player 1 Health " << Attacker->GetHealth() << endl;
         cout << "Player 2 Health " << Defender->GetHealth()  << endl;
     }
+
+
     return 0;
 }
