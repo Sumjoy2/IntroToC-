@@ -71,5 +71,4 @@ void Player::TurnEffectsPlayer(const char Input, const char Response, Zombie* Op
 			Opponent->TakeDamage(AtkOne);
 		}
 	}
-	
 }

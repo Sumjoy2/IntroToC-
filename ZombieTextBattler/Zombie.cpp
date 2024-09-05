@@ -13,6 +13,11 @@ int Zombie::TellHealth()
 	return Health;
 }
 
+bool Zombie::TellDead()
+{
+	return IsDead;
+}
+
 void Zombie::TakeDamage(int DmgDealt)
 {
 	int Invincable = std::rand() % 10;
@@ -39,5 +44,10 @@ void Zombie::TurnEffectsZombies(const char Input, const char Response, Player* O
 		{
 			Opponent->TakeDamage(AtkOne / Opponent->Defence);
 		}
+	}
+
+	if (Health <= 0)
+	{
+		IsDead = true;
 	}
 }

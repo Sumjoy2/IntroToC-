@@ -9,7 +9,7 @@ class Player
 	//cannot be used outside of class
 private:
 	std::string Name;
-	int Health = 5;
+	int Health = 25;
 	int AtkOne = 2;
 	int Score = 1;
 	int HealAmt = 2;
