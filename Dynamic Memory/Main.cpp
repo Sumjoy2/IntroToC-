@@ -28,7 +28,9 @@ class Player
 int main()
 {
 	int UserNumbers;
-
+	char BaseArray[5] = { 'b', 'c', 'e', 'f', 'D' };
+	int IntArr[5] = {1, 2, 3, 4, 5};
+	int Outarr[7];
 	////Normal Array
 	//int Numbers[10] = {};
 	//cout << "How many numbers" << endl;
@@ -38,8 +40,12 @@ int main()
 
 	//delete[] DynamicNumbers;
 
-	cin >> UserNumbers;
-	cout << ZeroArray << endl;
+	//cin >> UserNumbers;
+	//cout << ZeroArray << endl;
+	//NumberLover();
+	cout <<endl << *CharSearch('d', BaseArray, false);
+	//DuplicateArray(IntArr, 5);
+	IntSubArrCopy(IntArr, 2, 4, Outarr);
 	
 	return 0;
 }
