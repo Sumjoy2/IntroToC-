@@ -11,7 +11,11 @@ private:
 	* Put your internal data structures and members here as needed
 	*/
 
+	//The String itself
 	char* TheString = nullptr;
+	//Needed if the function wants to return a copy insead of the actual string
+	char* StringCopy = nullptr;
+	//The Strings Size including the null character
 	size_t StringSize = 2;
 
 public:
@@ -58,7 +62,7 @@ public:
 	/*
 	* @brief Using std::cout prints the stored string to the console window
 	*/
-	void WriteString();
+	void WriteString(bool IsCopy = false);
 
 	/**
 	 * @brief Returns the character at a specific index of the string
@@ -122,7 +126,7 @@ public:
 	 * @param Str The substring to find (must be lexicographically equivalent)
 	 * @return Index of the first occurance of the substring, or -1 if not found
 	 */
-	int Find(const String& Str, size_t StartIndex = 0) const;
+	int Find(const String& Str, size_t StartIndex = 0, bool IsCaseSensitive = false) const;
 
 	/**
 	 * @brief Replace all occurrances of the string to search for with the replacement string
@@ -135,7 +139,6 @@ public:
 	 */
 	String& Replace(const String& Find, const String& Replace);
 
-public:
 	/**
 	 * @brief Creates a new string, concatenates the other string onto the end of this string.
 	 * @param Other The other string.
