@@ -5,8 +5,9 @@ class Rooom
 {
 private:
 	// TODO for YOU: How can we store the level?
-
 	char* Name = nullptr;
+	char* Data = nullptr;
+
 	size_t WidthSize = 0;
 	size_t HeightSize = 0;
 
@@ -23,6 +24,14 @@ public:
 	// Destrutor
 	// Should clean up the data allocated dynamically
 	~Rooom();
+
+	// Copy constructor
+	// Constructs a new 'Room' by copying an existing one
+	Rooom(const Rooom& Other);
+
+	// Copy assignment
+	// Updates an existing 'Room' by copying another existing Room
+	Rooom& operator=(const Rooom& Other);
 
 	void Print();
 
