@@ -64,6 +64,11 @@ public:
 	*/
 	void WriteString(bool IsCopy = false);
 
+	/*
+	* @brief •WILL DELETE OLD STRING• Reads input from the console using std::cin.getline and sets it to TheString.
+	*/
+	void ReadFromConsole();
+
 	/**
 	 * @brief Returns the character at a specific index of the string
 	 *
@@ -103,6 +108,8 @@ public:
 	 */
 	String& Prepend(const String& Str);
 
+
+	
 	/**
 	 * @brief Returns a const-qualified pointer to beginning of this string. No additional allocation.
 	 * @return Const-qualified pointer to beginning of this string
@@ -120,6 +127,8 @@ public:
 	 */
 	String ToUpper() const;
 
+
+	//Turned both finds into 1 function so its not overloaded
 	/**
 	 * @brief Find the first occurrance of the given substring at or after the given start index
 	 * @param StartIndex The index to begin finding from defaults to 0

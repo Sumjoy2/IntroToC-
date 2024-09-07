@@ -3,7 +3,8 @@
 
 int main()
 {
-	const String TestString("Pineapples are really good!! ");
+	String TestString("Pineapples are really good!! ");
+	String TestString2("WHOOOOO ");
 
 	//std::cout << TestString.Length() << std::endl;
 	//TestString.WriteString();
@@ -16,7 +17,25 @@ int main()
 	//std::cout << std::endl;
 	
 	//With this test case should return 11
-	std::cout << TestString.Find("are") << std::endl;
+	//std::cout << TestString.Find("are") << std::endl;
+
+	//TestString + TestString2;
+
+	//TestString.Append(TestString2);
+	//TestString.Prepend(TestString2);
+	//TestString.WriteString();
+	//std::cout << std::endl;
+
+	//TheTestCase
+	//TestString.CStr << std::endl;
+	// 
+	//TestString.ReadFromConsole();
+	//TestString.WriteString(); 
+	//TestString = TestString2;
+	//TestString.WriteString(); 
+	
+	
+
 
 	return 0;
 }
