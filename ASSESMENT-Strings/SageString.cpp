@@ -6,13 +6,12 @@ String::String()
 {
 	TheString = new char[StringSize];
 	StringCopy = new char[StringSize];
-	TheString[0] = ' ';
-	TheString[1] = 00;
+	TheString[0] = '\0';
 	strcpy_s(StringCopy, StringSize, TheString);
 }
 
 //Basic way using string copy built into iostream
-//I could end up doing each one individually
+//I could end up doing each one individually but thats is a mild pain
 String::String(const char* str)
 {
 	//making sure the string is big enough to hold the null terminating character
@@ -76,6 +75,7 @@ void String::ReadFromConsole()
 }
 #pragma endregion
 
+#pragma region CharacterAt
 char& String::CharacterAt(size_t Index)
 {
 	return TheString[Index];
@@ -85,6 +85,7 @@ const char& String::CharacterAt(size_t Index) const
 {
 	return TheString[Index];
 }
+#pragma endregion
 
 bool String::Equals(const String& Other) const
 {
@@ -146,7 +147,12 @@ String& String::Prepend(const String& Str)
 }
 #pragma endregion
 
-#pragma region UpperLower
+const char* String::CStr() const
+{
+	return &TheString[0];
+}
+
+#pragma region Upper/Lower
 String String::ToLower() const
 {
 	//Copies the string into string copy to return
@@ -197,12 +203,12 @@ String String::ToUpper() const
 }
 #pragma endregion
 
-//TODO FIX THIS. It is something to do with needing to set temp counter to 0
+#pragma region Find/Replace
 int String::Find(const String& Str, size_t StartIndex, bool IsCaseSensitive) const
 {
 	size_t TempLenght = Str.Length();
-	int TempCounter = 0;
-	//Loops through TheString starting at StartIndex
+	
+	//checks for if what im finding should not be case sensitive 
 	if (!IsCaseSensitive)
 	{
 		//Makes the External String copy lowercase
@@ -210,14 +216,15 @@ int String::Find(const String& Str, size_t StartIndex, bool IsCaseSensitive) con
 		//makes the string copy lowercase
 		ToLower();
 	}
-
+	//Loops through StringCopy starting at StartIndex up to StringSize minus the null character
 	for (int si = StartIndex; si < StringSize - 1; si++)
 	{
-		if (StringCopy[si] == '\0') break;
+		int TempCounter = 0;
+		//checks the string for null pointer if it has one leaves the loop
 		//Loops through External String
 		for (int ei = 0; ei < TempLenght; ei++)
 		{
-			if (StringCopy[si] == Str.StringCopy[ei])
+			if (StringCopy[si + ei] == Str.StringCopy[ei])
 			{
 				TempCounter++;
 			}
@@ -228,9 +235,34 @@ int String::Find(const String& Str, size_t StartIndex, bool IsCaseSensitive) con
 			return si;
 		}
 	}
-
+	//returns -1 if the string to find isnt found
 	return -1;
 }
+
+String& String::Replace(const String& Find, const String& Replace)
+{
+	//The Index of what to find
+	int FindIndex = this->Find(Find);
+	//The Length of replacement string
+	int RTemp = Replace.Length();
+	if (FindIndex == -1)
+	{
+		//Throws an error
+	}
+	//checks if replacement string is longer than the current string
+	if (StringSize - 1 < RTemp)
+	{
+		//needs to add enough to string to hold the replacement string
+	}
+	//Loops through starting from FindIndex up to Replacement string length
+	for (int i = FindIndex; i < RTemp; i++)
+	{
+
+	}
+
+	return *this;
+}
+#pragma endregion
 
 #pragma region OperatorChanging
 String String::operator+(const String& Other) const
@@ -263,6 +295,7 @@ String& String::operator+=(const String& Other)
 		TheString[Temo + i] = Other.TheString[i];
 	}
 	
+	//&this->Append(Other);
 	return *this;
 }
 
@@ -312,4 +345,9 @@ const char& String::operator[](size_t Index) const
 	return this->TheString[Index];
 }
 
+//std::ostream& operator<<(std::ostream& Stream, String& Str)
+//{
+//	// TODO: insert return statement here
+//	
+//}
 #pragma endregion

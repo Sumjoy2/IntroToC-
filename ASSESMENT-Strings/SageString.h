@@ -107,9 +107,7 @@ public:
 	 *		   to store full string.
 	 */
 	String& Prepend(const String& Str);
-
-
-	
+		
 	/**
 	 * @brief Returns a const-qualified pointer to beginning of this string. No additional allocation.
 	 * @return Const-qualified pointer to beginning of this string
@@ -126,7 +124,6 @@ public:
 	 * @return New copy of this string in all uppercase
 	 */
 	String ToUpper() const;
-
 
 	//Turned both finds into 1 function so its not overloaded
 	/**
@@ -207,6 +204,4 @@ public:
 	// * @details Optional. Remove if not implemented.
 	//*/
 	//friend std::ostream& operator<<(std::ostream& Stream, String& Str);
-
-
 };

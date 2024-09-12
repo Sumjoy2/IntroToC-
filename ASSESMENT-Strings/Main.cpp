@@ -17,7 +17,7 @@ int main()
 	//std::cout << std::endl;
 	
 	//With this test case should return 11
-	//std::cout << TestString.Find("are") << std::endl;
+	int test = TestString.Find("are");
 
 	//TestString + TestString2;
 
@@ -34,8 +34,5 @@ int main()
 	//TestString = TestString2;
 	//TestString.WriteString(); 
 	
-	
-
-
 	return 0;
 }
