@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 
 /**
  * @brief A managed string that grows as needed with basic text manipulation
@@ -46,6 +47,15 @@ public:
 	 *
 	 */
 	String(const String& other);
+
+	/**
+	 * @brief Steals the data of an existing string
+	 *
+	 * @param The other string to steal from.
+	 *
+	 * @details move constructor.
+	 */
+	String(String&& other);
 
 	/**
 	 * @brief Deallocates all memory used.
@@ -143,7 +153,7 @@ public:
 				exceeded when replacing the string. It will not reallocate if
 				there is enough capacity to do it in-place.
 	 */
-	String& Replace(const String& Find, const String& Replace);
+	String& Replace(const String& Find, const String& Replace, bool ReplaceAll = true);
 
 	/**
 	 * @brief Creates a new string, concatenates the other string onto the end of this string.
@@ -203,5 +213,5 @@ public:
 	// * @return Reference to the stream that was written to.
 	// * @details Optional. Remove if not implemented.
 	//*/
-	//friend std::ostream& operator<<(std::ostream& Stream, String& Str);
+	friend std::ostream& operator<<(std::ostream& Stream, const String& Str);
 };

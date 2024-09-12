@@ -31,6 +31,21 @@ String::String(const String& other)
 	strcpy_s(StringCopy, other.StringSize, other.StringCopy);
 }
 
+String::String(String&& other)
+{
+	//the data taking
+	StringSize = other.StringSize;
+	TheString = new char[StringSize];
+	StringCopy = new char[StringSize];
+	strcpy_s(TheString, other.StringSize, other.TheString);
+	strcpy_s(StringCopy, other.StringSize, other.StringCopy);
+
+	//the data destroying
+	other.TheString = nullptr;
+	other.StringCopy = nullptr;
+	other.StringSize = 0;
+}
+
 String::~String()
 {
 	delete[] TheString;
@@ -149,7 +164,7 @@ String& String::Prepend(const String& Str)
 
 const char* String::CStr() const
 {
-	return &TheString[0];
+	return TheString;
 }
 
 #pragma region Upper/Lower
@@ -206,6 +221,7 @@ String String::ToUpper() const
 #pragma region Find/Replace
 int String::Find(const String& Str, size_t StartIndex, bool IsCaseSensitive) const
 {
+	//String to finds length
 	size_t TempLenght = Str.Length();
 	
 	//checks for if what im finding should not be case sensitive 
@@ -216,11 +232,11 @@ int String::Find(const String& Str, size_t StartIndex, bool IsCaseSensitive) con
 		//makes the string copy lowercase
 		ToLower();
 	}
+
 	//Loops through StringCopy starting at StartIndex up to StringSize minus the null character
 	for (int si = StartIndex; si < StringSize - 1; si++)
 	{
 		int TempCounter = 0;
-		//checks the string for null pointer if it has one leaves the loop
 		//Loops through External String
 		for (int ei = 0; ei < TempLenght; ei++)
 		{
@@ -235,31 +251,63 @@ int String::Find(const String& Str, size_t StartIndex, bool IsCaseSensitive) con
 			return si;
 		}
 	}
+
 	//returns -1 if the string to find isnt found
 	return -1;
 }
 
-String& String::Replace(const String& Find, const String& Replace)
+String& String::Replace(const String& Find, const String& Replace, bool ReplaceAll)
 {
 	//The Index of what to find
 	int FindIndex = this->Find(Find);
-	//The Length of replacement string
-	int RTemp = Replace.Length();
+	//Returns current version of itself if Find doesnt find anything
 	if (FindIndex == -1)
 	{
-		//Throws an error
-	}
-	//checks if replacement string is longer than the current string
-	if (StringSize - 1 < RTemp)
-	{
-		//needs to add enough to string to hold the replacement string
-	}
-	//Loops through starting from FindIndex up to Replacement string length
-	for (int i = FindIndex; i < RTemp; i++)
-	{
-
+		return *this;
 	}
 
+	//The Length of replacement string
+	int RTemp = Replace.Length();
+	
+	//Checks if it should replace it all
+	if(ReplaceAll == true)
+	{
+		while (FindIndex != -1)
+		{
+			//Checks if replacement is longer than word looking for
+			if (RTemp > Find.Length())
+			{
+				String TheCopy(TheString);
+				StringSize += RTemp;
+				TheString = new char[StringSize];
+				strcpy_s(TheString, StringSize, TheCopy.TheString);
+			}
+			//Loops through starting from FindIndex up to Replacement string length
+			for (int i = 0; i < RTemp; i++)
+			{
+				TheString[i + FindIndex] = Replace.TheString[i];
+			}
+			//updates FindIndex
+			FindIndex = this->Find(Find, FindIndex + RTemp);
+		}
+	}
+	else
+	{
+		//Checks if replacement is longer than word looking for
+		if (RTemp > Find.Length())
+		{
+			String TheCopy(TheString);
+			StringSize += RTemp;
+			TheString = new char[StringSize];
+			strcpy_s(TheString, StringSize, TheCopy.TheString);
+		}
+		//Loops through starting from FindIndex up to Replacement string length
+		for (int i = 0; i < RTemp; i++)
+		{
+			TheString[i + FindIndex] = Replace.TheString[i];
+		}
+	}
+	strcpy_s(StringCopy, StringSize, TheString);
 	return *this;
 }
 #pragma endregion
@@ -269,7 +317,7 @@ String String::operator+(const String& Other) const
 {
 	String NewClass = {TheString};
 	NewClass.Append(Other);
-	return String();
+	return NewClass;
 }
 
 String& String::operator+=(const String& Other)
@@ -345,9 +393,8 @@ const char& String::operator[](size_t Index) const
 	return this->TheString[Index];
 }
 
-//std::ostream& operator<<(std::ostream& Stream, String& Str)
-//{
-//	// TODO: insert return statement here
-//	
-//}
+std::ostream& operator<<(std::ostream& Stream, const String& Str)
+{
+	return Stream << Str.CStr();
+}
 #pragma endregion
