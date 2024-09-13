@@ -27,6 +27,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Ruleof3or5", "Ruleof3or5\Ru
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ASSESMENT-Strings", "ASSESMENT-Strings\ASSESMENT-Strings.vcxproj", "{CEE26782-4144-4570-8831-8DCFD9A80DFF}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ASSESSMENT -TextAdventure", "ASSESSMENT -TextAdventure\ASSESSMENT -TextAdventure.vcxproj", "{18C47425-7747-4259-86EC-A159AF041467}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -131,6 +133,14 @@ Global
 		{CEE26782-4144-4570-8831-8DCFD9A80DFF}.Release|x64.Build.0 = Release|x64
 		{CEE26782-4144-4570-8831-8DCFD9A80DFF}.Release|x86.ActiveCfg = Release|Win32
 		{CEE26782-4144-4570-8831-8DCFD9A80DFF}.Release|x86.Build.0 = Release|Win32
+		{18C47425-7747-4259-86EC-A159AF041467}.Debug|x64.ActiveCfg = Debug|x64
+		{18C47425-7747-4259-86EC-A159AF041467}.Debug|x64.Build.0 = Debug|x64
+		{18C47425-7747-4259-86EC-A159AF041467}.Debug|x86.ActiveCfg = Debug|Win32
+		{18C47425-7747-4259-86EC-A159AF041467}.Debug|x86.Build.0 = Debug|Win32
+		{18C47425-7747-4259-86EC-A159AF041467}.Release|x64.ActiveCfg = Release|x64
+		{18C47425-7747-4259-86EC-A159AF041467}.Release|x64.Build.0 = Release|x64
+		{18C47425-7747-4259-86EC-A159AF041467}.Release|x86.ActiveCfg = Release|Win32
+		{18C47425-7747-4259-86EC-A159AF041467}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
