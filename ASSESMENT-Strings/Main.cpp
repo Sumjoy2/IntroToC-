@@ -85,6 +85,11 @@ int main()
 		TestFile << "AdditionEqual: Success" << endl;
 	if (TestString != TestString2)
 		TestFile << "NotEqual: Success" << endl;
+	String SubString = TestString.Substring("Really");
+	if (SubString == "Really")
+		TestFile << "Substring: Success" << endl;
+	else
+		TestFile << "Substring: Fail" << endl;
 
 	TestFile.close();
 	return 0;

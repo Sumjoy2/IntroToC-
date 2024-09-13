@@ -145,6 +145,13 @@ public:
 	String& Replace(const String& Find, const String& Replace, bool ReplaceAll = true);
 
 	/**
+	 * @brief Gives you the part of the string you search for
+	 * @param Find The string to find (must be lexicographically equivalent)
+	 * @return Reference to just the searched bit of string
+	 */
+	String Substring(const String& Find);
+
+	/**
 	 * @brief Creates a new string, concatenates the other string onto the end of this string.
 	 * @param Other The other string.
 	 * @return A new string object with "this string" appended with "Other".

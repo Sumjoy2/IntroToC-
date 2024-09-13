@@ -215,7 +215,7 @@ int String::Find(const String& Str, size_t StartIndex, bool IsCaseSensitive) con
 			//Loops through External String
 			for (int ei = 0; ei < TempLenght; ei++)
 			{
-				if (Lower.TheString[si + ei] == Str.TheString[ei])
+				if (Lower.TheString[si + ei] == LoweredExternal.TheString[ei])
 				{
 					TempCounter++;
 				}
@@ -304,6 +304,23 @@ String& String::Replace(const String& Find, const String& Replace, bool ReplaceA
 	}
 	return *this;
 }
+
+String String::Substring(const String& StringToFind)
+{
+	String TheSub(StringToFind);
+	int StartLocal = this->Find(StringToFind);
+	if (StartLocal == -1)
+	{
+		return *this;
+	}
+
+	int EndLocal = StringToFind.Length();
+	for (int i = StartLocal; i < EndLocal; i++)
+	{
+		TheSub.TheString[i - StartLocal] = TheString[i];
+	}
+	return TheSub;
+}
 #pragma endregion
 
 #pragma region OperatorChanging
@@ -366,5 +383,6 @@ const char& String::operator[](size_t Index) const
 std::ostream& operator<<(std::ostream& Stream, const String& Str)
 {
 	return Stream << Str.CStr();
+
 }
 #pragma endregion
