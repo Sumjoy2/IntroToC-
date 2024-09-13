@@ -14,8 +14,6 @@ private:
 
 	//The String itself
 	char* TheString = nullptr;
-	//Needed if the function wants to return a copy insead of the actual string
-	char* StringCopy = nullptr;
 	//The Strings Size including the null character
 	size_t StringSize = 2;
 
@@ -49,15 +47,6 @@ public:
 	String(const String& other);
 
 	/**
-	 * @brief Steals the data of an existing string
-	 *
-	 * @param The other string to steal from.
-	 *
-	 * @details move constructor.
-	 */
-	String(String&& other);
-
-	/**
 	 * @brief Deallocates all memory used.
 	 */
 	~String();
@@ -72,7 +61,7 @@ public:
 	/*
 	* @brief Using std::cout prints the stored string to the console window
 	*/
-	void WriteString(bool IsCopy = false);
+	void WriteToConsole();
 
 	/*
 	* @brief •WILL DELETE OLD STRING• Reads input from the console using std::cin.getline and sets it to TheString.

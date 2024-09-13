@@ -1,55 +1,33 @@
 #include "SageString.h"
 #include <iostream>
+#include <cassert>
 
 #pragma region ConstructDeconstruct
 String::String()
 {
 	TheString = new char[StringSize];
-	StringCopy = new char[StringSize];
-	TheString[0] = '\0';
-	strcpy_s(StringCopy, StringSize, TheString);
+	TheString[0] = ' ';
+	TheString[1] = '\0';
 }
 
-//Basic way using string copy built into iostream
-//I could end up doing each one individually but thats is a mild pain
 String::String(const char* str)
 {
 	//making sure the string is big enough to hold the null terminating character
 	StringSize = strlen(str) + 1;
 	TheString = new char[StringSize];
-	StringCopy = new char[StringSize];
 	strcpy_s(TheString, StringSize, str);
-	strcpy_s(StringCopy, StringSize, TheString);
 }
 
 String::String(const String& other)
 {
 	StringSize = other.StringSize;
 	TheString = new char[StringSize];
-	StringCopy = new char[StringSize];
 	strcpy_s(TheString, other.StringSize, other.TheString);
-	strcpy_s(StringCopy, other.StringSize, other.StringCopy);
-}
-
-String::String(String&& other)
-{
-	//the data taking
-	StringSize = other.StringSize;
-	TheString = new char[StringSize];
-	StringCopy = new char[StringSize];
-	strcpy_s(TheString, other.StringSize, other.TheString);
-	strcpy_s(StringCopy, other.StringSize, other.StringCopy);
-
-	//the data destroying
-	other.TheString = nullptr;
-	other.StringCopy = nullptr;
-	other.StringSize = 0;
 }
 
 String::~String()
 {
 	delete[] TheString;
-	delete[] StringCopy;
 }
 #pragma endregion
 
@@ -59,18 +37,11 @@ size_t String::Length() const
 }
 
 #pragma region Console Read/Write
-void String::WriteString(bool IsCopy)
+void String::WriteToConsole()
 {
 	for (int i = 0; i < StringSize; i++)
 	{
-		if (IsCopy == true)
-		{
-			std::cout << StringCopy[i];
-		}
-		else
-		{
-			std::cout << TheString[i];
-		}
+		std::cout << TheString[i];
 	}
 }
 
@@ -112,6 +83,7 @@ bool String::Equals(const String& Other) const
 #pragma region Appending
 String& String::Append(const String& Str)
 {
+	String TheStringCopy(TheString);
 	//gives Temo the lenght of its current String without the null character
 	int Temo = Length();
 	//Sets the string size to Current size without null and incoming string size with null character
@@ -122,23 +94,25 @@ String& String::Append(const String& Str)
 	//Loops through the old string size and copies the old string over
 	for (int i = 0; i < Temo; i++)
 	{
-		if (StringCopy[i] == '\0') 
+		if (TheStringCopy.TheString[i] == '\0')
 			break;
-		TheString[i] = StringCopy[i];
+		assert(i < StringSize);
+		TheString[i] = TheStringCopy.TheString[i];
 	}
 
 	//Loops through TheString position + Old string length and copies old string to spots including the null character
-	for (int i = 0; i < StringSize; i++)
+	for (int i = 0; i < StringSize - Temo; i++)
 	{
+		assert(Temo + i < StringSize);
 		TheString[Temo + i] = Str.TheString[i];
 	}
 
 	return *this; //temp return so program doesnt yell
 }
 
-
 String& String::Prepend(const String& Str)
 {
+	String TheStringCopy(TheString);
 	//gives Temo the lenght of its Input String without the null character
 	int Temo = Str.Length();
 	//Sets the string size to Input String size without null and Current string size with null character
@@ -153,11 +127,11 @@ String& String::Prepend(const String& Str)
 	}
 
 	//Loops through TheString position + Input string length and copies old string to spots including the null character
-	for (int i = 0; i < StringSize; i++)
+	for (int i = 0; i < StringSize - Temo ; i++)
 	{
-		TheString[Temo + i] = StringCopy[i];
+		assert(Temo + i < StringSize);
+		TheString[Temo + i] = TheStringCopy.TheString[i];
 	}
-
 	return *this; //temp return so program doesnt yell
 }
 #pragma endregion
@@ -171,56 +145,58 @@ const char* String::CStr() const
 String String::ToLower() const
 {
 	//Copies the string into string copy to return
-	strcpy_s(StringCopy, StringSize, TheString);
+	String TheStringCopy(TheString);
 	for (int i = 0; i < StringSize; i++)
 	{
 		//Check if its null terminating character then leaves loop
-		if (StringCopy[i] == '\0')
+		if (TheStringCopy.TheString[i] == '\0')
 		{
 			break;
 		}
 		//checks if current position in the string is a space then continues loop from top
-		else if (StringCopy[i] == ' ') continue;
+		else if (TheStringCopy.TheString[i] == ' ') continue;
 		//Checking if current thing in the string is actually a upletter then changes it to lower
-		else if (65 <= StringCopy[i] && StringCopy[i] <= 90)
+		else if (65 <= TheStringCopy.TheString[i] && TheStringCopy.TheString[i] <= 90)
 		{
-			StringCopy[i] = StringCopy[i] + 32;
+			assert(i < StringSize);
+			TheStringCopy.TheString[i] = TheStringCopy.TheString[i] + 32;
 		}
 	}
 	//Returns the now lowercase string copy
-	return StringCopy;
+	return TheStringCopy.TheString;
 }
 
 //Makes all of the letters in the string Capitals
 String String::ToUpper() const
 {
 	//Copies the string into string copy to return
-	strcpy_s(StringCopy, StringSize, TheString);
+	String TheStringCopy(TheString);
 
 	for (int i = 0; i < StringSize; i++)
 	{
 		//Check if its null terminating character then leaves loop
-		if (StringCopy[i] == '\0')
+		if (TheStringCopy.TheString[i] == '\0')
 		{
 			break;
 		}
 		//checks if current position in the string is a space then continues loop from top
-		else if (StringCopy[i] == ' ') continue;
+		else if (TheStringCopy.TheString[i] == ' ') continue;
 		//Checking if current thing in the string is actually a lowletter then changes it to capital
-		else if (97 <= StringCopy[i] && StringCopy[i] <= 122)
+		else if (97 <= TheStringCopy.TheString[i] && TheStringCopy.TheString[i] <= 122)
 		{
-			StringCopy[i] = StringCopy[i] - 32;
+			TheStringCopy.TheString[i] = TheStringCopy.TheString[i] - 32;
 		}
 	}
 
 	//Returns the now capital string copy
-	return StringCopy;
+	return TheStringCopy.TheString;
 }
 #pragma endregion
 
 #pragma region Find/Replace
 int String::Find(const String& Str, size_t StartIndex, bool IsCaseSensitive) const
 {
+	String TheStringCopy(TheString);
 	//String to finds length
 	size_t TempLenght = Str.Length();
 	
@@ -228,19 +204,38 @@ int String::Find(const String& Str, size_t StartIndex, bool IsCaseSensitive) con
 	if (!IsCaseSensitive)
 	{
 		//Makes the External String copy lowercase
-		Str.ToLower();
+		String LoweredExternal = Str.ToLower();
 		//makes the string copy lowercase
-		ToLower();
+		String Lower = ToLower();
+
+		//Loops through StringCopy starting at StartIndex up to StringSize minus the null character
+		for (int si = StartIndex; si < StringSize - 1; si++)
+		{
+			int TempCounter = 0;
+			//Loops through External String
+			for (int ei = 0; ei < TempLenght; ei++)
+			{
+				if (Lower.TheString[si + ei] == Str.TheString[ei])
+				{
+					TempCounter++;
+				}
+			}
+			//does temp counter number equal the length of External String
+			if (TempCounter == TempLenght)
+			{
+				return si;
+			}
+		}
 	}
 
-	//Loops through StringCopy starting at StartIndex up to StringSize minus the null character
+	//Loops through TheString starting at StartIndex up to StringSize minus the null character
 	for (int si = StartIndex; si < StringSize - 1; si++)
 	{
 		int TempCounter = 0;
 		//Loops through External String
 		for (int ei = 0; ei < TempLenght; ei++)
 		{
-			if (StringCopy[si + ei] == Str.StringCopy[ei])
+			if (TheString[si + ei] == Str.TheString[ei])
 			{
 				TempCounter++;
 			}
@@ -307,7 +302,6 @@ String& String::Replace(const String& Find, const String& Replace, bool ReplaceA
 			TheString[i + FindIndex] = Replace.TheString[i];
 		}
 	}
-	strcpy_s(StringCopy, StringSize, TheString);
 	return *this;
 }
 #pragma endregion
@@ -322,28 +316,7 @@ String String::operator+(const String& Other) const
 
 String& String::operator+=(const String& Other)
 {
-	//gives Temo the lenght of its current String without the null character
-	int Temo = Length();
-	//Sets the string size to Current size without null and incoming string size with null character
-	StringSize = Temo + Other.StringSize;
-	//Reset the Current String
-	TheString = new char[StringSize];
-
-	//Loops through the old string size and copies the old string over
-	for (int i = 0; i < Temo; i++)
-	{
-		if (StringCopy[i] == '\0')
-			break;
-		TheString[i] = StringCopy[i];
-	}
-
-	//Loops through TheString position + Old string length and copies old string to spots including the null character
-	for (int i = 0; i < StringSize; i++)
-	{
-		TheString[Temo + i] = Other.TheString[i];
-	}
-	
-	//&this->Append(Other);
+	this->Append(Other);
 	return *this;
 }
 
@@ -377,19 +350,16 @@ String& String::operator=(const String& Str)
 		TheString[i] = Str.TheString[i];
 	}
 
-	strcpy_s(StringCopy, StringSize, TheString);
 	return *this;
 }
 
 char& String::operator[](size_t Index)
 {
-	// TODO: insert return statement here
 	return this->TheString[Index];
 }
 
 const char& String::operator[](size_t Index) const
 {
-	// TODO: insert return statement here
 	return this->TheString[Index];
 }
 
