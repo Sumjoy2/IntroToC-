@@ -13,27 +13,28 @@ struct Item
 public:
 	String Name = " ";
 	String Desc = " ";
-	bool NeedsKey = false;
-};
+}; bool NeedsKey = false;
 
 class Room
 {
-private:
-	//the id of the room
-	String RoomId = " ";
+private: 
+	//the name of the room
+	String RoomName = " ";
+	//the ID of the room
+	int RoomId = -1;
 	//Description of the room
 	String RoomDesc = " ";
 	//Item in the room
 	Item HeldItem;
 	Item EmptyItem;
-
 public:
 	bool ItemThere = false;
 	bool IsWater = false;
+
 	//Default Constructor
 	Room()
 	{
-		RoomId = " ";
+		RoomName = " ";
 		RoomDesc = " ";
 		EmptyItem.Name = "Nothing";
 		EmptyItem.Desc = "The Empty air";
@@ -41,42 +42,69 @@ public:
 	//Construct a Room with new Id
 	//Room(String NewId);
 	//Construct a Room with a new Id and desc. Optionally how many connections the room has
-	Room(String NewId, String NewDesc, bool Water = false)
+	Room(String NewName,int NewId, String NewDesc, bool Water = false)
 	{
-		RoomId = NewId;
+		RoomName = NewName;
 		RoomDesc = NewDesc;
+		RoomId = NewId;
 		ItemThere = false;
 		EmptyItem.Name = "Nothing";
 		EmptyItem.Desc = "The Empty air";
 		IsWater = Water;
 	};
+
 	//Construct a Room with a new Id and desc and an item. Optionally how many connections the room has
-	Room(String NewId, String NewDesc, Item NewItem, bool Water = false)
+	Room(String NewName, int NewId, String NewDesc, Item NewItem, Item NewItem2, bool Water = false)
 	{
-		RoomId = NewId;
+		RoomName = NewName;
 		RoomDesc = NewDesc;
+		RoomId = NewId;
 		HeldItem = NewItem;
+		EmptyItem = NewItem2;
 		ItemThere = true;
-		EmptyItem.Name = "Nothing";
-		EmptyItem.Desc = "The Empty air";
 		IsWater = Water;
 	};
 	~Room()
 	{
 
 	};
+
+	void PrintRoomItems()
+	{
+		if (EmptyItem.Name == "Nothing")
+		{
+			HeldItem.Name.WriteToConsole();
+		}
+		else
+		{
+			HeldItem.Name.WriteToConsole();
+			EmptyItem.Name.WriteToConsole();
+		}
+	}
+
 	Item TakeItem()
 	{
 		if (ItemThere == true)
 			return HeldItem;
 		return EmptyItem;
 	};
+
 	void ItemUpdate(Item NewItem)
 	{
 		HeldItem = NewItem;
 	};
-	////Gives the Current rooms name
-	//String CurrentRoom();
+
+	//Gives the Current rooms name
+	String CurrentRoom()
+	{
+		return RoomName;
+	};
+
+	//Gives the Current Rooms ID
+	int CurrentRoomID()
+	{
+		return RoomId;
+	}
 };
 
 class Player
@@ -89,6 +117,8 @@ private:
 	int HeldItemNumb = 0;
 public:
 	Room* CurrentRoom;
+	Room* PrevRoom;
+
 	Player();
 	Player(float startHealth, int ItemMax, Room &StartRoom)
 	{
@@ -164,7 +194,7 @@ public:
 		//{
 		//	//Fish
 		//}
-		if (NewItem == "Mysterious Orb")
+		if (NewItem == "Shadow Orb")
 		{
 			cout << "The Orb gets absorbed into you" << endl;
 			Items[ItemLocal].Name = "Used Orb";
@@ -179,12 +209,32 @@ public:
 		}
 		else if (NewItem == "Boat")
 		{
-			cout << /*Lore Stuff Here*/ "YOU WIN" << endl;
-			EndReach = true;
-			//END THE GAME
+			bool HasUsedOrb = false;
+			for (int i = 0; i < HeldItemNumb; i++)
+			{
+				if (Items[i].Name == "Used Orb")
+				{
+					HasUsedOrb = true;
+				}
+			}
+			if (HasUsedOrb == true)
+			{
+				cout << /*Lore Stuff Here*/ "DEMO OVER: " << endl;
+				EndReach = true;
+				//END THE GAME
+			}
+			else
+			{
+				cout << "The goblins do not react to your presense" << endl;
+			}
 		}
 	};
-	//void ChangeRooms(Room *NewRoom);
+	void ChangeRooms(Room* NewRoom)
+	{
+		cout << "You move to " << NewRoom << endl;
+		PrevRoom = CurrentRoom;
+		CurrentRoom = NewRoom;
+	};
 };
 
 int main()
@@ -195,21 +245,23 @@ int main()
 	localtime_s(&timeTM, &currTime);   
 
 #pragma region ItemSetup
-	Item ORB; ORB.Name = "Mysterious Orb"; ORB.Desc = "A purple orb that glows with a mysterious power";
+	Item PurpleORB; PurpleORB.Name = "Shadow Orb"; PurpleORB.Desc = "A purple orb that glows with a mysterious power";
 	Item Shroom; Shroom.Name = "Mushroom"; Shroom.Desc = "A small mushroom which will heal some Health";
 	Item FishRod; FishRod.Name = "Worn Fishing Rod"; FishRod.Desc = "A well used fishing rod bait included";
 	Item Fish; Fish.Name = "Fish"; Fish.Desc = "A caught fish that will heal some health";
 	Item Boat; Boat.Name = "Boat"; Boat.Desc = "A sturdy looking boat crewed by FRIENDLY goblins", true;
+	Item Nothing; Nothing.Name = "Nothing"; Nothing.Desc = "A grasp of Nothing";
 #pragma endregion
 
 #pragma region RoomSetup
-	Room CaveBack("Back of Cave", "The back of the cave you started in.", ORB);
-	Room CaveEntrance("Entrance of Cave", "The entrance to the cave you woke up in.");
-	Room Forest("Forest", "A nice lush forest just outside the cave.", Shroom);
-	Room Lake("Lake", "A small lake with fish", FishRod, true);
-	Room Town("Town", "A quiant little town");
-	Room Dock("Dock", "A nice little dock connecting the town to the vast ocean", Boat, true);
+	Room CaveBack("Back of Cave", 0, "The back of the cave you started in.", PurpleORB, Nothing);
+	Room CaveEntrance("Entrance of Cave", 1, "The entrance to the cave you woke up in.");
+	Room Forest("Forest", 2, "A nice lush forest just outside the cave.", Shroom, Nothing);
+	Room Lake("Lake", 3, "A small lake with fish", FishRod, Fish, true);
+	Room Town("Town", 4, "A quiant little town");
+	Room Dock("Dock", 5, "A nice little dock connecting the town to the vast ocean", Boat, Nothing, true);
 #pragma endregion
+
 	//Sets ThePlayers health to 25 and 10 item slots and starting room the back of the cave
 	Player ThePlayer(25.0f, 10, CaveBack);
 	String Input;
@@ -228,6 +280,7 @@ int main()
 #pragma region GameLoop
 	while (Input.ToLower() != "quit" && GAMEOVER == false)
 	{
+		cout << "use - use an item, take - take the rooms item, check - check inventory, Move - Move to next room";
 		//Gets input from the player forever
 		Input.ReadFromConsole();
 		if (Input.Find("use") != -1)
@@ -248,9 +301,22 @@ int main()
 			//	cout << "You Grab at: " << ThePlayer.CurrentRoom->TakeItem().Name;
 			//}
 		}
-		else if (Input.Find("Check Inventory") != -1)
+		else if (Input.Find("Check") != -1)
 		{
 			ThePlayer.CheckInv();
+		}
+		else if (Input.Find("Move"))
+		{
+			cout << "Input where to go" << endl;
+			Input.ReadFromConsole();
+			if (ThePlayer.CurrentRoom->CurrentRoom() == Input)
+			{
+				cout << "You are already here. What do you do instead";
+			}
+			else if (Input == ThePlayer.PrevRoom->CurrentRoom())
+			{
+				ThePlayer.ChangeRooms(ThePlayer.PrevRoom);
+			}
 		}
 	}
 #pragma endregion
