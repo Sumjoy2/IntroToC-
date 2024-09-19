@@ -70,7 +70,6 @@ public:
 
 	/**
 	 * @brief Returns the character at a specific index of the string
-	 *
 	 * @param The index to return from
 	 * @return Reference to the character in the string
 	 */

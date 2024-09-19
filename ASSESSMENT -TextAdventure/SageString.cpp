@@ -383,6 +383,5 @@ const char& String::operator[](size_t Index) const
 std::ostream& operator<<(std::ostream& Stream, const String& Str)
 {
 	return Stream << Str.CStr();
-
 }
 #pragma endregion
