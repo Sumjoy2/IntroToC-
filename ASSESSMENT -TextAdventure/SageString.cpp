@@ -47,7 +47,7 @@ void String::WriteToConsole()
 
 void String::ReadFromConsole()
 {
-	std::cout << "Please input a string\n > ";
+	std::cout << "\n > ";
 	char UserInput[255] = {};
 	std::cin.getline(UserInput, 255);
 	StringSize = strlen(UserInput) + 1;

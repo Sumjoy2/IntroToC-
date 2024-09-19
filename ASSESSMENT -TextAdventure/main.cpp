@@ -27,9 +27,14 @@ private:
 	//Item in the room
 	Item HeldItem;
 	Item EmptyItem;
+
+	Room* ConnectedRoom = nullptr;
+	Room* ConnectedRoom2 = nullptr;
+	Room* PrevRoom = nullptr;
 public:
 	bool ItemThere = false;
 	bool IsWater = false;
+	
 
 	//Default Constructor
 	Room()
@@ -66,19 +71,22 @@ public:
 	};
 	~Room()
 	{
-
+		
 	};
 
 	void PrintRoomItems()
 	{
-		if (EmptyItem.Name == "Nothing")
+		if (ItemThere == false)
 		{
-			HeldItem.Name.WriteToConsole();
+			cout << EmptyItem.Name;
+		}
+		else if (EmptyItem.Name == "Nothing" && ItemThere == true)
+		{
+			cout << HeldItem.Name;
 		}
 		else
 		{
-			HeldItem.Name.WriteToConsole();
-			EmptyItem.Name.WriteToConsole();
+			cout << HeldItem.Name << ", " << EmptyItem.Name;
 		}
 	}
 
@@ -94,6 +102,17 @@ public:
 		HeldItem = NewItem;
 	};
 
+	void ConnectedRoomUpdate(Room *NewRoom1)
+	{
+		ConnectedRoom = NewRoom1;
+	}
+	void ConnectedRoomUpdate(Room *NewRoom1, Room *NewRoom2, Room* PrevoiusRoom = nullptr)
+	{
+		ConnectedRoom = NewRoom1;
+		ConnectedRoom2 = NewRoom2;
+		PrevRoom = PrevoiusRoom;
+	}
+
 	//Gives the Current rooms name
 	String CurrentRoom()
 	{
@@ -104,6 +123,12 @@ public:
 	int CurrentRoomID()
 	{
 		return RoomId;
+	}
+
+	//Gives the current rooms description
+	String CurrentDesc()
+	{
+		return RoomDesc;
 	}
 };
 
@@ -117,7 +142,6 @@ private:
 	int HeldItemNumb = 0;
 public:
 	Room* CurrentRoom;
-	Room* PrevRoom;
 
 	Player();
 	Player(float startHealth, int ItemMax, Room &StartRoom)
@@ -141,6 +165,15 @@ public:
 	{
 		Clamp(0.0f, health, curhealth += InAmount);
 	};
+
+	void Look()
+	{
+		cout << CurrentRoom->CurrentDesc() << endl;
+		CurrentRoom->PrintRoomItems();
+		cout << endl;
+		cout << "connects to ";
+
+	}
 
 	//Outputs what is currently in the players invintory
 	void CheckInv()
@@ -229,10 +262,10 @@ public:
 			}
 		}
 	};
+
 	void ChangeRooms(Room* NewRoom)
 	{
 		cout << "You move to " << NewRoom << endl;
-		PrevRoom = CurrentRoom;
 		CurrentRoom = NewRoom;
 	};
 };
@@ -260,6 +293,13 @@ int main()
 	Room Lake("Lake", 3, "A small lake with fish", FishRod, Fish, true);
 	Room Town("Town", 4, "A quiant little town");
 	Room Dock("Dock", 5, "A nice little dock connecting the town to the vast ocean", Boat, Nothing, true);
+
+	CaveBack.ConnectedRoomUpdate(&CaveEntrance);
+	CaveEntrance.ConnectedRoomUpdate(&Forest, nullptr, &CaveBack);
+	Forest.ConnectedRoomUpdate(&Lake, &Town, &CaveEntrance);
+	Lake.ConnectedRoomUpdate(&Forest);
+	Town.ConnectedRoomUpdate(&Dock, nullptr, &Forest);
+	Dock.ConnectedRoomUpdate(&Town);
 #pragma endregion
 
 	//Sets ThePlayers health to 25 and 10 item slots and starting room the back of the cave
@@ -285,7 +325,7 @@ int main()
 		Input.ReadFromConsole();
 		if (Input.Find("use") != -1)
 		{
-			cout << "Input what to use" << endl;
+			cout << "Input what to use";
 			Input.ReadFromConsole();
 			ThePlayer.ItemUse(Input, GAMEOVER);
 		}
@@ -305,20 +345,21 @@ int main()
 		{
 			ThePlayer.CheckInv();
 		}
-		else if (Input.Find("Move"))
+		else if (Input.Find("look") != -1)
 		{
-			cout << "Input where to go" << endl;
+			ThePlayer.Look();
+		}
+		else if (Input.Find("Move") != -1)
+		{
+			cout << "Input where to go";
 			Input.ReadFromConsole();
 			if (ThePlayer.CurrentRoom->CurrentRoom() == Input)
 			{
 				cout << "You are already here. What do you do instead";
 			}
-			else if (Input == ThePlayer.PrevRoom->CurrentRoom())
-			{
-				ThePlayer.ChangeRooms(ThePlayer.PrevRoom);
-			}
 		}
 	}
 #pragma endregion
+
 	return 0;
 }
