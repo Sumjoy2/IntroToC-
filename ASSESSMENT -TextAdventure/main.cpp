@@ -35,7 +35,7 @@ int main()
 	Room CaveEntrance("Cave Entrance", "The entrance to the cave you woke up in. There is some goblins just chilling here.");
 	Room Forest("Forest", "A nice lush forest just outside the cave.", Shroom, Nothing);
 	Room Lake("Lake", "A small lake with fish", FishRod, Fish, true);
-	Room Town("Town", "A quiant little town. A paper near the dock describes how no one can communicate with the goblin ship.");
+	Room Town("Town", "A quiant little town.");
 	Room Dock("Dock", "A nice little dock connecting the town to the vast ocean", Boat, Fish, true);
 
 	//Sets up the connected rooms

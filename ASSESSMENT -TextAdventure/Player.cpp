@@ -29,7 +29,7 @@ float Player::HealthReturn()
 
 void Player::ChangeHealth(float InAmount)
 {
-	Clamp(0.0f, health, curhealth += InAmount);
+	curhealth = Clamp(0.0f, health, curhealth + InAmount);
 };
 
 void Player::Look()
@@ -127,7 +127,7 @@ void Player::ItemUse(String* NewItem, bool* EndReach)
 	else if (NewItem->Equals("mushroom"))
 	{
 		cout << "You eat the shroom. You feel a lot better" << endl;
-		ChangeHealth(15);
+		ChangeHealth(150);
 		Items[ItemLocal].Name = "Bit Shroom";
 		Items[ItemLocal].Desc = "All the edible parts of the mushroom are gone";
 	}
