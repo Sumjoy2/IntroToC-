@@ -115,6 +115,7 @@ void Player::ItemUse(String* NewItem, bool* EndReach)
 	if (ItemLocal == -1)
 	{
 		cout << "you dont have that item" << endl;
+return;
 	}
 
 	if (NewItem->Equals("shadow orb"))
