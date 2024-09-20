@@ -127,7 +127,7 @@ void Player::ItemUse(String* NewItem, bool* EndReach)
 	else if (NewItem->Equals("mushroom"))
 	{
 		cout << "You eat the shroom. You feel a lot better" << endl;
-		ChangeHealth(150);
+		ChangeHealth(15);
 		Items[ItemLocal].Name = "Bit Shroom";
 		Items[ItemLocal].Desc = "All the edible parts of the mushroom are gone";
 	}
