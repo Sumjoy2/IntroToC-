@@ -111,83 +111,47 @@ void Player::ItemUse(String* NewItem, bool* EndReach)
 			continue;
 		}
 	}
-
 	if (ItemLocal == -1)
 	{
 		cout << "you dont have that item" << endl;
 		return;
 	}
 
-	if (NewItem->Equals("shadow orb"))
-	{
-		cout << "The Orb gets absorbed into you" << endl;
-		Items[ItemLocal].Name = "Used Orb";
-		Items[ItemLocal].Desc = "An empty glass orb";
-	}
-	else if (NewItem->Equals("mushroom"))
-	{
-		cout << "You eat the shroom. You feel a lot better" << endl;
-		ChangeHealth(15);
-		Items[ItemLocal].Name = "Bit Shroom";
-		Items[ItemLocal].Desc = "All the edible parts of the mushroom are gone";
-	}
-	else if (NewItem->Equals("fish"))
-	{
-		cout << "You eat the Fish. You feel a bit better" << endl;
-		ChangeHealth(10);
-		Items[ItemLocal].Name = "Fish Slot";
-		Items[ItemLocal].Desc = "The fish slot of your inventory now";
-	}
-	else if (NewItem->Equals("used orb"))
-	{
-		cout << "After violently shaking the orb... Nothing happens." << endl;
-	}
-	else if (NewItem->Equals("bit shroom"))
-	{
-		cout << "You just cant get yourself to eat the last bit." << endl;
-	}
-	else if (NewItem->Equals("fish slot"))
-	{
-		cout << "Being unsure how this got here you are unable to tell if it does anything other than hold a fish." << endl;
-	}
-	else if (NewItem->Equals("worn fishing rod"))
-	{
-		cout << "good craftmanship but you use the TAKE command to get the fish." << endl;
-	}
-	else if (NewItem->Equals("nothing"))
-	{
-		cout << "I dont know how you got this but its pretty impressive you did." << endl;
-	}
-	else if (NewItem->Equals("boat"))
-	{
-		bool HasUsedOrb = false;
-		//looks for used orb item then sets HasUsedOrb = true
-		for (int i = 0; i < HeldItemNumb; i++)
-		{
-			if (Items[i].Name.ToLower() == "used orb")
-			{
-				HasUsedOrb = true;
-				break;
-			}
-		}
-		//if its true then the game ends
-		if (HasUsedOrb == true)
-		{
-			cout << "The goblins understand you and bring you aboard the ship." << endl;
-			cout << "On the ship you are lead to the helm of the ship." << endl;
-			cout << "Once at the helm you start to glow a dark purple" << endl;
-			cout << "The entire ship reacts to the Shadow Orb that you absorbed." << endl;
-			cout << "You see the ship become infused with the purple color you are glowing" << endl;
-			cout << "You pass out." << endl;
-			cout << "DEMO OVER: " << endl;
+	Items[ItemLocal].Use();
+	if (Items[ItemLocal].GiveUsed().Name != nullptr)
+		Items[ItemLocal] = Items[ItemLocal].GiveUsed();
 
-			*EndReach = true;
-		}
-		else
-		{
-			cout << "The goblins do not react to your presense" << endl;
-		}
-	}
+
+	//else if (NewItem->Equals("boat"))
+	//{
+	//	bool HasUsedOrb = false;
+	//	//looks for used orb item then sets HasUsedOrb = true
+	//	for (int i = 0; i < HeldItemNumb; i++)
+	//	{
+	//		if (Items[i].Name.ToLower() == "used orb")
+	//		{
+	//			HasUsedOrb = true;
+	//			break;
+	//		}
+	//	}
+	//	//if its true then the game ends
+	//	if (HasUsedOrb == true)
+	//	{
+	//		cout << "The goblins understand you and bring you aboard the ship." << endl;
+	//		cout << "On the ship you are lead to the helm of the ship." << endl;
+	//		cout << "Once at the helm you start to glow a dark purple" << endl;
+	//		cout << "The entire ship reacts to the Shadow Orb that you absorbed." << endl;
+	//		cout << "You see the ship become infused with the purple color you are glowing" << endl;
+	//		cout << "You pass out." << endl;
+	//		cout << "DEMO OVER: " << endl;
+
+	//		*EndReach = true;
+	//	}
+	//	else
+	//	{
+	//		cout << "The goblins do not react to your presense" << endl;
+	//	}
+	//}
 }
 
 void Player::ChangeRooms(String* NewRoom)

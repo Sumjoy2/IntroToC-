@@ -1,5 +1,8 @@
 #pragma once
-struct Item;
+class Item;
+class Food;
+class Tool;
+class Door;
 
 class Room
 {
@@ -26,7 +29,7 @@ public:
 	Room(String NewName, String NewDesc, bool Water = false);
 
 	//Construct a Room with a new Id and desc and an item. Optionally how many connections the room has
-	Room(String NewName, String NewDesc, Item NewItem, Item NewItem2, bool Water = false);
+	Room(String NewName, String NewDesc, Item *NewItem, Item *NewItem2, bool Water = false);
 	~Room();
 
 	/*

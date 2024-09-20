@@ -25,12 +25,12 @@ Room::Room(String NewName, String NewDesc, bool Water)
 	IsWater = Water;
 }
 
-Room::Room(String NewName, String NewDesc, Item NewItem, Item NewItem2, bool Water)
+Room::Room(String NewName, String NewDesc, Item* NewItem, Item* NewItem2, bool Water)
 {
 	RoomName = NewName;
 	RoomDesc = NewDesc;
-	HeldItem = NewItem;
-	EmptyItem = NewItem2;
+	HeldItem = *NewItem;
+	EmptyItem = *NewItem2;
 	ItemThere = true;
 	IsWater = Water;
 }

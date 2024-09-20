@@ -21,22 +21,25 @@ int main()
 
 	//Initializes items, gives items their name & their description
 #pragma region ItemSetup
-	Item PurpleORB; PurpleORB.Name = "Shadow Orb"; PurpleORB.Desc = "A purple orb that glows with a mysterious power";
-	Item Shroom; Shroom.Name = "Mushroom"; Shroom.Desc = "A small mushroom which will heal some Health";
-	Item FishRod; FishRod.Name = "Worn Fishing Rod"; FishRod.Desc = "A well used fishing rod bait included";
-	Item Fish; Fish.Name = "Fish"; Fish.Desc = "A caught fish that will heal some health";
-	Item Boat; Boat.Name = "Boat"; Boat.Desc = "A sturdy looking boat crewed by FRIENDLY goblins. They dont understand common.", true;
-	Item Nothing; Nothing.Name = "Nothing"; Nothing.Desc = "A grasp of Nothing";
+	EmptyItem EmptyOrb("Empty Orb", "An empty glass like orb");
+	Orb PurpleORB("Shadow Orb", "A purple orb that glows with a mysterious power", &EmptyOrb);
+	Tool FishRod("Worn Fishing Rod", "A well used fishing rod bait included");
+	Item FishSlot("Fish Slot", "A fish slot used to store fish");
+	Food Fish("Fish", "A caught fish that will heal some health", &FishSlot);
+	EmptyItem BitShroom("Bit Shroom", "All the edible parts are gone");
+	Food Shroom("Mushroom", "A small mushroom which will heal some Health", &BitShroom);
+	Door Boat("Boat", "A sturdy looking boat crewed by FRIENDLY goblins. They dont understand common.");
+	Item Nothing("Nothing", "A grasp of nothing");
 #pragma endregion
 
 #pragma region RoomSetup
 	//initializes all rooms
-	Room CaveBack("Cave Back", "The back of a dingy slightly damp cave with what roughtly looks like a pedestal.", PurpleORB, Nothing);
+	Room CaveBack("Cave Back", "The back of a dingy slightly damp cave with what roughtly looks like a pedestal.", &PurpleORB, &Nothing);
 	Room CaveEntrance("Cave Entrance", "The entrance to the cave you woke up in. There is some goblins just chilling here.");
-	Room Forest("Forest", "A nice lush forest just outside the cave.", Shroom, Nothing);
-	Room Lake("Lake", "A small lake with fish", FishRod, Fish, true);
+	Room Forest("Forest", "A nice lush forest just outside the cave.", &Shroom, &Nothing);
+	Room Lake("Lake", "A small lake with fish", &FishRod, &Fish, true);
 	Room Town("Town", "A quiant little town.");
-	Room Dock("Dock", "A nice little dock connecting the town to the vast ocean", Boat, Fish, true);
+	Room Dock("Dock", "A nice little dock connecting the town to the vast ocean", &Boat, &Fish, true);
 
 	//Sets up the connected rooms
 	CaveBack.ConnectedRoomUpdate(&CaveEntrance);
