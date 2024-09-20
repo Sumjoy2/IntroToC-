@@ -145,7 +145,7 @@ int main()
 				//sets TheCheck = if input equals current room connection 1
 				TheCheck = LoweredInput == ThePlayer.CurrentRoom->ConnRoomOne()->CurrentRoom().ToLower() ||
 					//or if input equals current room connection previous
-					Input == ThePlayer.CurrentRoom->ConnRoomPrev()->CurrentRoom().ToLower() ? true : false;
+					LoweredInput == ThePlayer.CurrentRoom->ConnRoomPrev()->CurrentRoom().ToLower() ? true : false;
 			}
 			else
 			{
