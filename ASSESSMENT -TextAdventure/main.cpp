@@ -25,17 +25,17 @@ int main()
 	Item Shroom; Shroom.Name = "Mushroom"; Shroom.Desc = "A small mushroom which will heal some Health";
 	Item FishRod; FishRod.Name = "Worn Fishing Rod"; FishRod.Desc = "A well used fishing rod bait included";
 	Item Fish; Fish.Name = "Fish"; Fish.Desc = "A caught fish that will heal some health";
-	Item Boat; Boat.Name = "Boat"; Boat.Desc = "A sturdy looking boat crewed by FRIENDLY goblins", true;
+	Item Boat; Boat.Name = "Boat"; Boat.Desc = "A sturdy looking boat crewed by FRIENDLY goblins. They dont understand common.", true;
 	Item Nothing; Nothing.Name = "Nothing"; Nothing.Desc = "A grasp of Nothing";
 #pragma endregion
 
 #pragma region RoomSetup
 	//initializes all rooms
 	Room CaveBack("Cave Back", "The back of a dingy slightly damp cave with what roughtly looks like a pedestal.", PurpleORB, Nothing);
-	Room CaveEntrance("Cave Entrance", "The entrance to the cave you woke up in.");
+	Room CaveEntrance("Cave Entrance", "The entrance to the cave you woke up in. There is some goblins just chilling here.");
 	Room Forest("Forest", "A nice lush forest just outside the cave.", Shroom, Nothing);
 	Room Lake("Lake", "A small lake with fish", FishRod, Fish, true);
-	Room Town("Town", "A quiant little town");
+	Room Town("Town", "A quiant little town. A paper near the dock describes how no one can communicate with the goblin ship.");
 	Room Dock("Dock", "A nice little dock connecting the town to the vast ocean", Boat, Fish, true);
 
 	//Sets up the connected rooms
@@ -79,7 +79,6 @@ int main()
 	#pragma region InputChecking
 		if (Input.Find("use") != -1)
 		{
-			cout << "Input what to use your options are:\n";
 			ThePlayer.CheckInv();
 			Input.ReadFromConsole();
 			LoweredInput = Input.ToLower();

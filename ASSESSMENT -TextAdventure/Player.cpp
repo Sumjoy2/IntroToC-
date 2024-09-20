@@ -40,22 +40,22 @@ void Player::Look()
 	cout << endl;
 	cout << "Connects to ";
 	CurrentRoom->PrintConnections();
-	cout << "You feel like you have " << HealthReturn() << "% of your energy" << endl;
+	cout << "\nYou feel like you have " << HealthReturn() << "% of your energy" << endl;
 }
 
 void Player::CheckInv()
 {
+	cout << "Your inventory has: " << endl;
 	for (int i = 0; i < AmountOfItems; i++)
 	{
-		if (HeldItemNumb == i)
+		if (HeldItemNumb == i+1)
 		{
-			cout << Items[i].Name << ": " << Items[i].Desc;
+			cout << Items[i].Name << "- " << Items[i].Desc;
 			break;
 		}
 		else
-			cout << Items[i].Name << ": " << Items[i].Desc << ", ";
+			cout << Items[i].Name << "- " << Items[i].Desc << endl;
 	}
-	cout << endl;
 }
 
 bool Player::HasItem(Item ItemToLookFor)
@@ -115,7 +115,7 @@ void Player::ItemUse(String* NewItem, bool* EndReach)
 	if (ItemLocal == -1)
 	{
 		cout << "you dont have that item" << endl;
-return;
+		return;
 	}
 
 	if (NewItem->Equals("shadow orb"))
@@ -134,9 +134,29 @@ return;
 	else if (NewItem->Equals("fish"))
 	{
 		cout << "You eat the Fish. You feel a bit better" << endl;
-		ChangeHealth(15);
+		ChangeHealth(10);
 		Items[ItemLocal].Name = "Fish Slot";
 		Items[ItemLocal].Desc = "The fish slot of your inventory now";
+	}
+	else if (NewItem->Equals("used orb"))
+	{
+		cout << "After violently shaking the orb... Nothing happens." << endl;
+	}
+	else if (NewItem->Equals("bit shroom"))
+	{
+		cout << "You just cant get yourself to eat the last bit." << endl;
+	}
+	else if (NewItem->Equals("fish slot"))
+	{
+		cout << "Being unsure how this got here you are unable to tell if it does anything other than hold a fish." << endl;
+	}
+	else if (NewItem->Equals("worn fishing rod"))
+	{
+		cout << "good craftmanship but you use the TAKE command to get the fish." << endl;
+	}
+	else if (NewItem->Equals("nothing"))
+	{
+		cout << "I dont know how you got this but its pretty impressive you did." << endl;
 	}
 	else if (NewItem->Equals("boat"))
 	{

@@ -12,7 +12,7 @@ Room::Room()
 	RoomName = " ";
 	RoomDesc = " ";
 	EmptyItem.Name = "Nothing";
-	EmptyItem.Desc = "The Empty air";
+	EmptyItem.Desc = "A grasp of Nothing";
 }
 
 Room::Room(String NewName, String NewDesc, bool Water)
@@ -21,7 +21,7 @@ Room::Room(String NewName, String NewDesc, bool Water)
 	RoomDesc = NewDesc;
 	ItemThere = false;
 	EmptyItem.Name = "Nothing";
-	EmptyItem.Desc = "The Empty air";
+	EmptyItem.Desc = "A grasp of Nothing";
 	IsWater = Water;
 }
 
@@ -76,18 +76,18 @@ void Room::PrintConnections()
 {
 	if (PrevRoom == nullptr && ConnectedRoom2 == nullptr)
 	{
-		cout << ConnectedRoom->CurrentRoom() << endl;
+		cout << ConnectedRoom->CurrentRoom();
 	}
 	else if (ConnectedRoom2 == nullptr)
 	{
 		cout << ConnectedRoom->CurrentRoom() << ", ";
-		cout << PrevRoom->CurrentRoom() << endl;
+		cout << PrevRoom->CurrentRoom();
 	}
 	else
 	{
 		cout << ConnectedRoom->CurrentRoom() << ", ";
 		cout << ConnectedRoom2->CurrentRoom() << ", ";
-		cout << PrevRoom->CurrentRoom() << endl;
+		cout << PrevRoom->CurrentRoom();
 	}
 }
 
