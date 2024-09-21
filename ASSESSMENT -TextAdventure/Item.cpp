@@ -64,14 +64,15 @@ void Door::Use(Room* NextRoom, Player* ThePlayer)
 	{
 		if (ThePlayer->HasItem(ExpectedKey))
 		{
-			ThePlayer->ChangeRooms(NextRoom->CurrentRoom());
+			ThePlayer->ChangeRooms(NextRoom->CurrentRoom(), NextRoom);
+			return;
 		}
 		else
 		{
 			cout << "You dont have the item needed to do that" << endl;
+			return;
 		}
 	}
-	ThePlayer->ChangeRooms(NextRoom->CurrentRoom());
 }
 
 EmptyItem::EmptyItem(String NewName, String NewDesc) : Item(NewName, NewDesc)

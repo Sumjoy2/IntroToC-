@@ -2,7 +2,7 @@
 
 class Room;
 class String;
-struct Item;
+class Item;
 
 class Player
 {
@@ -35,12 +35,12 @@ public:
 	//Adds an item to the players inventory
 	void ItemAdd(Item* NewItem);
 	//Uses item that is in players inventory
-	void ItemUse(String* NewItem, bool* EndReach);
+	void ItemUse(String* NewItem);
 
 	/*
 	* @brief Updates the CurrentRoom
 	* @param A pointer to a string
 	* @details Checks the string and if its equal to a connecting room name
 	*/
-	void ChangeRooms(const String& NewRoom);
+	void ChangeRooms(const String& NewRoom, Room* TheEndRoom = nullptr);
 };

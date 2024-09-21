@@ -25,6 +25,7 @@ int main()
 	EmptyItem EmptyOrb("Empty Orb", "An empty glass like orb");
 	Orb PurpleORB("Shadow Orb", "A purple orb that glows with a mysterious power", &EmptyOrb);
 	Tool FishRod("Worn Fishing Rod", "A well used fishing rod bait included");
+	Tool Watch("Pocket Watch", "An old pocket watch");
 	Item FishSlot("Fish Slot", "A fish slot used to store fish");
 	Food Fish("Fish", "A caught fish that will heal some health", 5, &FishSlot);
 	EmptyItem BitShroom("Bit Shroom", "All the edible parts are gone");
@@ -50,13 +51,13 @@ int main()
 	Lake.ConnectedRoomUpdate(&Forest);
 	Town.ConnectedRoomUpdate(&Dock, nullptr, &Forest);
 	//TODO Fix End condition
-	Dock.ConnectedRoomUpdate(&Town, nullptr, nullptr, &EndRoom);
+	Dock.ConnectedRoomUpdate(&Town);
 #pragma endregion
 
 #pragma region GeneralSetup
 	//Sets ThePlayers health to 25 and 10 item slots and starting room the back of the cave
-	Player ThePlayer(25.0f, 10, Dock);
-	ThePlayer.ItemAdd(&EmptyOrb);
+	Player ThePlayer(25.0f, 10, CaveBack);
+	ThePlayer.ItemAdd(&Watch);
 	String Input;
 	bool GAMEOVER = false;
 #pragma endregion
@@ -181,12 +182,21 @@ int main()
 				ThePlayer.ChangeRooms(LoweredInput);
 				cout << "You are now at: " << ThePlayer.CurrentRoom->CurrentRoom() << endl;
 			}
-			if (ThePlayer.CurrentRoom->CurrentRoom() == EndRoom.CurrentRoom())
-				GAMEOVER = true;
 		}
-		
+		if (ThePlayer.CurrentRoom->CurrentRoom().Equals(EndRoom.CurrentRoom()))
+			GAMEOVER = true;
 	#pragma endregion
 	}
+	if (GAMEOVER == true)
+	{
+		cout << "The goblins understand you and bring you aboard the ship." << endl;
+		cout << "On the ship you are lead to the helm of the ship." << endl;
+		cout << "Once at the helm you start to glow a dark purple" << endl;
+		cout << "The entire ship reacts to the Shadow Orb that you absorbed." << endl;
+		cout << "You see the ship become infused with the purple color you are glowing" << endl;
+		cout << "You pass out." << endl;
+		cout << "DEMO OVER: " << endl;
+}
 #pragma endregion
 
 	return 0;

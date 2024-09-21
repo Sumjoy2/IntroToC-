@@ -50,7 +50,7 @@ void Player::CheckInv()
 	{
 		if (HeldItemNumb == i+1)
 		{
-			cout << Items[i]->Name << "- " << Items[i]->Desc;
+			cout << Items[i]->Name << "- " << Items[i]->Desc << endl;
 			break;
 		}
 		else
@@ -92,12 +92,16 @@ void Player::ItemAdd(Item *NewItem)
 	{
 		Items[HeldItemNumb] = NewItem;
 		HeldItemNumb++;
-		CurrentRoom->ItemThere = false;
+		if (HeldItemNumb != 1)
+		{
+			CurrentRoom->ItemThere = false;
+		}
 	}
 }
 
-void Player::ItemUse(String* NewItem, bool* EndReach)
+void Player::ItemUse(String* NewItem)
 {
+	//itemfinding
 	int ItemLocal = -1;
 	for (int i = 0; i < AmountOfItems; i++)
 	{
@@ -117,8 +121,8 @@ void Player::ItemUse(String* NewItem, bool* EndReach)
 		return;
 	}
 	
+	//checking if an item is a food item
 	Food* FoodPtr = dynamic_cast<Food*>(Items[ItemLocal]);
-
 	if (FoodPtr != nullptr)
 	{
 		FoodPtr->Use(this);
@@ -131,18 +135,25 @@ void Player::ItemUse(String* NewItem, bool* EndReach)
 	}
 }
 
-void Player::ChangeRooms(const String& NewRoom)
+void Player::ChangeRooms(const String& NewRoom, Room* TheEndRoom)
 {
-	if (NewRoom.Equals(CurrentRoom->ConnRoomOne()->CurrentRoom().ToLower()))
+	//is the end room not a nullptr and does NewRoom equal TheEndRoom
+	if (TheEndRoom != nullptr && NewRoom.Equals(TheEndRoom->CurrentRoom()))
+		CurrentRoom = TheEndRoom;
+	//Currentroom connection 1 equal newroom
+	else if (CurrentRoom->ConnRoomOne() != nullptr && NewRoom.Equals(CurrentRoom->ConnRoomOne()->CurrentRoom().ToLower()))
 	{
 		CurrentRoom = CurrentRoom->ConnRoomOne();
 	}
+	//Currentroom connection 2 equal newroom
 	else if (CurrentRoom->ConnRoomTwo() != nullptr && NewRoom.Equals(CurrentRoom->ConnRoomTwo()->CurrentRoom().ToLower()))
 	{
 		CurrentRoom = CurrentRoom->ConnRoomTwo();
 	}
+	//Currentroom connection previous room equal newroom
 	else if (CurrentRoom->ConnRoomPrev() != nullptr && NewRoom.Equals(CurrentRoom->ConnRoomPrev()->CurrentRoom().ToLower()))
 	{
 		CurrentRoom = CurrentRoom->ConnRoomPrev();
 	}
+
 }

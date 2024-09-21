@@ -2,9 +2,6 @@
 #include "SageString.h";
 
 class Item;
-class Food;
-class Tool;
-class Door;
 
 class Room
 {
