@@ -20,6 +20,7 @@ private:
 	Room* ConnectedRoom = nullptr;
 	Room* ConnectedRoom2 = nullptr;
 	Room* PrevRoom = nullptr;
+	Room* EndRoom = nullptr;
 
 public:
 	bool ItemThere = false;
@@ -40,7 +41,7 @@ public:
 	* @param Pointer to the Second new room
 	* @param Pointer to the previous room
 	*/
-	void ConnectedRoomUpdate(Room* NewRoom1, Room* NewRoom2 = nullptr, Room* PrevoiusRoom = nullptr);
+	void ConnectedRoomUpdate(Room* NewRoom1, Room* NewRoom2 = nullptr, Room* PrevoiusRoom = nullptr, Room* NewEndRoom = nullptr);
 
 	/*
 	* @brief prints to the screen the items in the room

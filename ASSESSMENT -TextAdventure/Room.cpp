@@ -40,11 +40,12 @@ Room::~Room()
 
 }
 
-void Room::ConnectedRoomUpdate(Room* NewRoom1, Room* NewRoom2, Room* PrevoiusRoom)
+void Room::ConnectedRoomUpdate(Room* NewRoom1, Room* NewRoom2, Room* PrevoiusRoom, Room* NewEndRoom)
 {
 	ConnectedRoom = NewRoom1;
 	ConnectedRoom2 = NewRoom2;
 	PrevRoom = PrevoiusRoom;
+	EndRoom = NewEndRoom;
 }
 
 void Room::PrintRoomItems()

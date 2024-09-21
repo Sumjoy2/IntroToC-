@@ -49,7 +49,8 @@ int main()
 	Forest.ConnectedRoomUpdate(&Lake, &Town, &CaveEntrance);
 	Lake.ConnectedRoomUpdate(&Forest);
 	Town.ConnectedRoomUpdate(&Dock, nullptr, &Forest);
-	Dock.ConnectedRoomUpdate(&Town);
+	//TODO Fix End condition
+	Dock.ConnectedRoomUpdate(&Town, nullptr, nullptr, &EndRoom);
 #pragma endregion
 
 #pragma region GeneralSetup
