@@ -90,7 +90,7 @@ int main()
 			ThePlayer.CheckInv();
 			Input.ReadFromConsole();
 			LoweredInput = Input.ToLower();
-			ThePlayer.ItemUse(&LoweredInput, &GAMEOVER);
+			ThePlayer.ItemUse(&LoweredInput);
 		}
 
 		else if (Input.Find("Take") != -1)

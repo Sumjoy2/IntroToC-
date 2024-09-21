@@ -83,7 +83,7 @@ void Player::ItemAdd(Item *NewItem)
 			SlotNumb = i;
 		}
 	}
-
+	//if new item is fish sets & has fish slot sets fishslot to fish
 	if (HasFishSlot == true && NewItem->Name.ToLower() == "fish")
 	{
 		Items[SlotNumb] = NewItem;
@@ -101,9 +101,11 @@ void Player::ItemAdd(Item *NewItem)
 
 void Player::ItemUse(String* NewItem)
 {
-	//itemfinding
+	/*
+	*The for loop checks if you have that item
+	*/
 	int ItemLocal = -1;
-	for (int i = 0; i < AmountOfItems; i++)
+	for (int i = 0; i < HeldItemNumb; i++)
 	{
 		if (NewItem->Equals(Items[i]->Name.ToLower()))
 		{
