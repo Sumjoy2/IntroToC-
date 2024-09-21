@@ -13,9 +13,9 @@ Item::Item(String newName, String newDesc)
 	Desc = newDesc;
 }
 
-Item Item::GiveUsed()
+Item* Item::GiveUsed()
 {
-	return *UsedItem;
+	return UsedItem;
 }
 
 Orb::Orb(String NewName, String NewDesc, Item* AfterUseItem) : Item(NewName, NewDesc)
@@ -28,13 +28,15 @@ void Orb::Use()
 	cout << "The Orbs powers get absorbed into you" << endl;
 }
 
-Food::Food(String NewName, String NewDesc, Item* AfterUseItem) : Item(NewName, NewDesc)
+Food::Food(String NewName, String NewDesc, int HowMuchHeal, Item* AfterUseItem) : Item(NewName, NewDesc)
 {
 	UsedItem = AfterUseItem;
+	HealAmount = HowMuchHeal;
 }
 
-void Food::Use(int HealAmount, Player *PlayerToAffect)
+void Food::Use(Player *PlayerToAffect)
 {
+	cout << "You eat the " << Name << " you feel better" << endl;
 	PlayerToAffect->ChangeHealth(HealAmount);
 	Name = UsedItem->Name;
 	Desc = UsedItem->Desc;
@@ -55,9 +57,21 @@ Door::Door(String NewName, String NewDesc, bool DoesNeedKey, Item* Key) : Item(N
 	ExpectedKey = Key;
 }
 
-void Door::Use(Room NextRoom)
+void Door::Use(Room* NextRoom, Player* ThePlayer)
 {
 	//DO STUFF HERE
+	if (NeedsKey == true)
+	{
+		if (ThePlayer->HasItem(ExpectedKey))
+		{
+			ThePlayer->ChangeRooms(NextRoom->CurrentRoom());
+		}
+		else
+		{
+			cout << "You dont have the item needed to do that" << endl;
+		}
+	}
+	ThePlayer->ChangeRooms(NextRoom->CurrentRoom());
 }
 
 EmptyItem::EmptyItem(String NewName, String NewDesc) : Item(NewName, NewDesc)
@@ -65,5 +79,4 @@ EmptyItem::EmptyItem(String NewName, String NewDesc) : Item(NewName, NewDesc)
 }
 void EmptyItem::Use()
 {
-
 }

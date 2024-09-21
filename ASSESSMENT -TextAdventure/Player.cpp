@@ -13,7 +13,7 @@ Player::Player(float startHealth, int ItemMax, Room& StartRoom)
 {
 	AmountOfItems = ItemMax;
 	curhealth = startHealth;
-	Items = new Item[AmountOfItems];
+	Items = new Item*[AmountOfItems];
 	CurrentRoom = &StartRoom;
 };
 
@@ -50,19 +50,19 @@ void Player::CheckInv()
 	{
 		if (HeldItemNumb == i+1)
 		{
-			cout << Items[i].Name << "- " << Items[i].Desc;
+			cout << Items[i]->Name << "- " << Items[i]->Desc;
 			break;
 		}
 		else
-			cout << Items[i].Name << "- " << Items[i].Desc << endl;
+			cout << Items[i]->Name << "- " << Items[i]->Desc << endl;
 	}
 }
 
-bool Player::HasItem(Item ItemToLookFor)
+bool Player::HasItem(Item *ItemToLookFor)
 {
-	for (int i = 0; i < AmountOfItems; i++)
+	for (int i = 0; i < HeldItemNumb; i++)
 	{
-		if (Items[i].Name.Equals(ItemToLookFor.Name))
+		if (Items[i]->Name.Equals(ItemToLookFor->Name))
 		{
 			return true;
 		}
@@ -70,21 +70,21 @@ bool Player::HasItem(Item ItemToLookFor)
 	return false;
 }
 
-void Player::ItemAdd(Item NewItem)
+void Player::ItemAdd(Item *NewItem)
 {
 	bool HasFishSlot = false;
 	int SlotNumb = -1;
 	//Checking if you have a fish slot
 	for (int i = 0; i < HeldItemNumb; i++)
 	{
-		if (Items[i].Name.ToLower() == "fish slot")
+		if (Items[i]->Name.ToLower() == "fish slot")
 		{
 			HasFishSlot = true;
 			SlotNumb = i;
 		}
 	}
 
-	if (HasFishSlot == true && NewItem.Name.ToLower() == "fish")
+	if (HasFishSlot == true && NewItem->Name.ToLower() == "fish")
 	{
 		Items[SlotNumb] = NewItem;
 	}
@@ -101,7 +101,7 @@ void Player::ItemUse(String* NewItem, bool* EndReach)
 	int ItemLocal = -1;
 	for (int i = 0; i < AmountOfItems; i++)
 	{
-		if (NewItem->Equals(Items[i].Name.ToLower()))
+		if (NewItem->Equals(Items[i]->Name.ToLower()))
 		{
 			ItemLocal = i;
 			break;
@@ -116,55 +116,32 @@ void Player::ItemUse(String* NewItem, bool* EndReach)
 		cout << "you dont have that item" << endl;
 		return;
 	}
+	
+	Food* FoodPtr = dynamic_cast<Food*>(Items[ItemLocal]);
 
-	Items[ItemLocal].Use();
-	if (Items[ItemLocal].GiveUsed().Name != nullptr)
-		Items[ItemLocal] = Items[ItemLocal].GiveUsed();
-
-
-	//else if (NewItem->Equals("boat"))
-	//{
-	//	bool HasUsedOrb = false;
-	//	//looks for used orb item then sets HasUsedOrb = true
-	//	for (int i = 0; i < HeldItemNumb; i++)
-	//	{
-	//		if (Items[i].Name.ToLower() == "used orb")
-	//		{
-	//			HasUsedOrb = true;
-	//			break;
-	//		}
-	//	}
-	//	//if its true then the game ends
-	//	if (HasUsedOrb == true)
-	//	{
-	//		cout << "The goblins understand you and bring you aboard the ship." << endl;
-	//		cout << "On the ship you are lead to the helm of the ship." << endl;
-	//		cout << "Once at the helm you start to glow a dark purple" << endl;
-	//		cout << "The entire ship reacts to the Shadow Orb that you absorbed." << endl;
-	//		cout << "You see the ship become infused with the purple color you are glowing" << endl;
-	//		cout << "You pass out." << endl;
-	//		cout << "DEMO OVER: " << endl;
-
-	//		*EndReach = true;
-	//	}
-	//	else
-	//	{
-	//		cout << "The goblins do not react to your presense" << endl;
-	//	}
-	//}
+	if (FoodPtr != nullptr)
+	{
+		FoodPtr->Use(this);
+	}
+	else
+	{
+		Items[ItemLocal]->Use();
+		if (Items[ItemLocal]->GiveUsed() != nullptr)
+			Items[ItemLocal] = Items[ItemLocal]->GiveUsed();
+	}
 }
 
-void Player::ChangeRooms(String* NewRoom)
+void Player::ChangeRooms(const String& NewRoom)
 {
-	if (NewRoom->Equals(CurrentRoom->ConnRoomOne()->CurrentRoom().ToLower()))
+	if (NewRoom.Equals(CurrentRoom->ConnRoomOne()->CurrentRoom().ToLower()))
 	{
 		CurrentRoom = CurrentRoom->ConnRoomOne();
 	}
-	else if (CurrentRoom->ConnRoomTwo() != nullptr && NewRoom->Equals(CurrentRoom->ConnRoomTwo()->CurrentRoom().ToLower()))
+	else if (CurrentRoom->ConnRoomTwo() != nullptr && NewRoom.Equals(CurrentRoom->ConnRoomTwo()->CurrentRoom().ToLower()))
 	{
 		CurrentRoom = CurrentRoom->ConnRoomTwo();
 	}
-	else if (CurrentRoom->ConnRoomPrev() != nullptr && NewRoom->Equals(CurrentRoom->ConnRoomPrev()->CurrentRoom().ToLower()))
+	else if (CurrentRoom->ConnRoomPrev() != nullptr && NewRoom.Equals(CurrentRoom->ConnRoomPrev()->CurrentRoom().ToLower()))
 	{
 		CurrentRoom = CurrentRoom->ConnRoomPrev();
 	}

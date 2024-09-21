@@ -11,8 +11,8 @@ Room::Room()
 {
 	RoomName = " ";
 	RoomDesc = " ";
-	EmptyItem.Name = "Nothing";
-	EmptyItem.Desc = "A grasp of Nothing";
+	EmptyItem = nullptr;
+	HeldItem = nullptr;
 }
 
 Room::Room(String NewName, String NewDesc, bool Water)
@@ -20,8 +20,8 @@ Room::Room(String NewName, String NewDesc, bool Water)
 	RoomName = NewName;
 	RoomDesc = NewDesc;
 	ItemThere = false;
-	EmptyItem.Name = "Nothing";
-	EmptyItem.Desc = "A grasp of Nothing";
+	EmptyItem = nullptr;
+	HeldItem = nullptr;
 	IsWater = Water;
 }
 
@@ -29,8 +29,8 @@ Room::Room(String NewName, String NewDesc, Item* NewItem, Item* NewItem2, bool W
 {
 	RoomName = NewName;
 	RoomDesc = NewDesc;
-	HeldItem = *NewItem;
-	EmptyItem = *NewItem2;
+	HeldItem = NewItem;
+	EmptyItem = NewItem2;
 	ItemThere = true;
 	IsWater = Water;
 }
@@ -51,23 +51,37 @@ void Room::PrintRoomItems()
 {
 	if (ItemThere == false)
 	{
-		cout << EmptyItem.Name;
+		cout << EmptyItem->Name;
 	}
-	else if (EmptyItem.Name == "Nothing" && ItemThere == true)
+	else if (EmptyItem->Name == "Nothing" && ItemThere == true)
 	{
-		cout << HeldItem.Name;
+		cout << HeldItem->Name;
 	}
 	else
 	{
-		cout << HeldItem.Name << ", " << EmptyItem.Name;
+		cout << HeldItem->Name << ", " << EmptyItem->Name;
 	}
 }
 
-Item Room::TakeItem()
+Item* Room::ReturnItem1()
 {
-	if (ItemThere == true)
+	return HeldItem;
+}
+Item* Room::ReturnItem2()
+{
+	return EmptyItem;
+}
+
+Item* Room::TakeItem()
+{
+	Door* Doorptr = dynamic_cast<Door*>(HeldItem);
+	if (Doorptr == nullptr)
 	{
-		return HeldItem;
+		if (ItemThere == true)
+		{
+			return HeldItem;
+		}
+		return EmptyItem;
 	}
 	return EmptyItem;
 }

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <ctime>
+#include <typeinfo>
 #include "SageString.h"
 #include "Item.h"
 #include "Room.h"
@@ -25,21 +26,22 @@ int main()
 	Orb PurpleORB("Shadow Orb", "A purple orb that glows with a mysterious power", &EmptyOrb);
 	Tool FishRod("Worn Fishing Rod", "A well used fishing rod bait included");
 	Item FishSlot("Fish Slot", "A fish slot used to store fish");
-	Food Fish("Fish", "A caught fish that will heal some health", &FishSlot);
+	Food Fish("Fish", "A caught fish that will heal some health", 5, &FishSlot);
 	EmptyItem BitShroom("Bit Shroom", "All the edible parts are gone");
-	Food Shroom("Mushroom", "A small mushroom which will heal some Health", &BitShroom);
-	Door Boat("Boat", "A sturdy looking boat crewed by FRIENDLY goblins. They dont understand common.");
+	Food Shroom("Mushroom", "A small mushroom which will heal some Health", 15,  &BitShroom);
+	Door Boat("Boat", "A sturdy looking boat crewed by FRIENDLY goblins. They dont understand common.", true,  &EmptyOrb);
 	Item Nothing("Nothing", "A grasp of nothing");
 #pragma endregion
 
 #pragma region RoomSetup
 	//initializes all rooms
 	Room CaveBack("Cave Back", "The back of a dingy slightly damp cave with what roughtly looks like a pedestal.", &PurpleORB, &Nothing);
-	Room CaveEntrance("Cave Entrance", "The entrance to the cave you woke up in. There is some goblins just chilling here.");
+	Room CaveEntrance("Cave Entrance", "The entrance to the cave you woke up in. There is some goblins just chilling here.", &Nothing, &Nothing);
 	Room Forest("Forest", "A nice lush forest just outside the cave.", &Shroom, &Nothing);
 	Room Lake("Lake", "A small lake with fish", &FishRod, &Fish, true);
-	Room Town("Town", "A quiant little town.");
+	Room Town("Town", "A quiant little town.", & Nothing, &Nothing);
 	Room Dock("Dock", "A nice little dock connecting the town to the vast ocean", &Boat, &Fish, true);
+	Room EndRoom("EndRoom", "The final room", &Nothing, &Nothing);
 
 	//Sets up the connected rooms
 	CaveBack.ConnectedRoomUpdate(&CaveEntrance);
@@ -52,7 +54,8 @@ int main()
 
 #pragma region GeneralSetup
 	//Sets ThePlayers health to 25 and 10 item slots and starting room the back of the cave
-	Player ThePlayer(25.0f, 10, CaveBack);
+	Player ThePlayer(25.0f, 10, Dock);
+	ThePlayer.ItemAdd(&EmptyOrb);
 	String Input;
 	bool GAMEOVER = false;
 #pragma endregion
@@ -90,16 +93,21 @@ int main()
 
 		else if (Input.Find("Take") != -1)
 		{
-			if (ThePlayer.CurrentRoom->ItemThere)
+			Door* DoorPtr = dynamic_cast<Door*>(ThePlayer.CurrentRoom->ReturnItem1());
+			if (DoorPtr != nullptr)
 			{
-				cout << "You Take: " << ThePlayer.CurrentRoom->TakeItem().Name << endl;
+				DoorPtr->Use(&EndRoom, &ThePlayer);
+			}
+			else if (ThePlayer.CurrentRoom->ItemThere)
+			{
+				cout << "You Take: " << ThePlayer.CurrentRoom->TakeItem()->Name << endl;
 				ThePlayer.ItemAdd(ThePlayer.CurrentRoom->TakeItem());
 			}
-			else if (ThePlayer.CurrentRoom->TakeItem().Name == Fish.Name && ThePlayer.HasItem(FishRod))
+			else if (ThePlayer.CurrentRoom->TakeItem()->Name == Fish.Name && ThePlayer.HasItem(&FishRod))
 			{
-				if (ThePlayer.HasItem(Fish) == false)
+				if (ThePlayer.HasItem(&Fish) == false)
 				{
-					cout << "You Grab at: " << ThePlayer.CurrentRoom->TakeItem().Name << endl;
+					cout << "You Grab at: " << ThePlayer.CurrentRoom->TakeItem()->Name << endl;
 					ThePlayer.ItemAdd(ThePlayer.CurrentRoom->TakeItem());
 				}
 				else
@@ -169,10 +177,13 @@ int main()
 				cout << "What?" << endl;
 			else
 			{
-				ThePlayer.ChangeRooms(&LoweredInput);
+				ThePlayer.ChangeRooms(LoweredInput);
 				cout << "You are now at: " << ThePlayer.CurrentRoom->CurrentRoom() << endl;
 			}
+			if (ThePlayer.CurrentRoom->CurrentRoom() == EndRoom.CurrentRoom())
+				GAMEOVER = true;
 		}
+		
 	#pragma endregion
 	}
 #pragma endregion

@@ -1,4 +1,6 @@
 #pragma once
+#include "SageString.h";
+
 class Item;
 class Food;
 class Tool;
@@ -12,8 +14,8 @@ private:
 	//Description of the room
 	String RoomDesc = " ";
 	//Item in the room
-	Item HeldItem;
-	Item EmptyItem;
+	Item* HeldItem;
+	Item* EmptyItem;
 
 	Room* ConnectedRoom = nullptr;
 	Room* ConnectedRoom2 = nullptr;
@@ -45,11 +47,14 @@ public:
 	*/
 	void PrintRoomItems();
 
+	Item* ReturnItem1();
+	Item* ReturnItem2();
+
 	/*
 	* @brief returns the item and essentially removes it
 	* @return current room item or the empty item if ItemThere is false
 	*/
-	Item TakeItem();
+	Item* TakeItem();
 
 	void PrintConnections();
 

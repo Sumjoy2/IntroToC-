@@ -9,7 +9,7 @@ class Player
 private:
 	float health = 100.0f;
 	float curhealth = 0.0f;
-	Item* Items = nullptr;
+	Item** Items = nullptr;
 	int AmountOfItems = 0;
 	int HeldItemNumb = 0;
 public:
@@ -30,10 +30,10 @@ public:
 	//Outputs what is currently in the players invintory
 	void CheckInv();
 
-	bool HasItem(Item ItemToLookFor);
+	bool HasItem(Item* ItemToLookFor);
 
 	//Adds an item to the players inventory
-	void ItemAdd(Item NewItem);
+	void ItemAdd(Item* NewItem);
 	//Uses item that is in players inventory
 	void ItemUse(String* NewItem, bool* EndReach);
 
@@ -42,5 +42,5 @@ public:
 	* @param A pointer to a string
 	* @details Checks the string and if its equal to a connecting room name
 	*/
-	void ChangeRooms(String* NewRoom);
+	void ChangeRooms(const String& NewRoom);
 };
